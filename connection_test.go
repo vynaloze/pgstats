@@ -31,6 +31,15 @@ var connCorrectTestTable = []struct {
 		[]string{"dbname=testDb", "user=testUser", "password=12345", "host=testHostname", "port=1234", "sslmode=disable"},
 		6,
 	},
+	{
+		"testDb", "testUser", "12345",
+		[]func(*connection) error{Host("testHostname"), Port(1234), SslMode("disable"),
+			FallbackApplicationName("testApp"), ConnectTimeout(42), SslCert("/test/loc"),
+			SslKey("/another"), SslRootCert("/i/am/already/tired/of/this")},
+		[]string{"dbname=testDb", "user=testUser", "password=12345", "host=testHostname", "port=1234", "sslmode=disable",
+			"fallback_application_name=testApp", "connect_timeout=42", "sslcert=/test/loc", "sslkey=/another", "sslrootcert=/i/am/already/tired/of/this"},
+		11,
+	},
 }
 
 var connFailTestTable = []struct {
