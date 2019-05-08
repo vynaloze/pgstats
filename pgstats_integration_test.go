@@ -12,6 +12,25 @@ var dbname = flag.String("dbname", "", "Test database name")
 var user = flag.String("user", "", "Test username")
 var password = flag.String("password", "", "Test password")
 
+func TestPgStatTables(t *testing.T) {
+	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
+	if err != nil {
+		t.Error(err)
+	}
+	all, err := s.PgStatAllTables()
+	if err != nil || len(all) == 0 {
+		t.Error(err)
+	}
+	usr, err := s.PgStatUserTables()
+	if err != nil || len(usr) == 0 {
+		t.Error(err)
+	}
+	sys, err := s.PgStatSystemTables()
+	if err != nil || len(sys) == 0 {
+		t.Error(err)
+	}
+}
+
 func TestPgStatIndexes(t *testing.T) {
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {

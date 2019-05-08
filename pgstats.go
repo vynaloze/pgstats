@@ -14,6 +14,29 @@ func Connect(dbname string, user string, password string, options ...func(*conne
 	return s, err
 }
 
+// PgStatAllTables returns an array containing statistics about accesses
+// to each table in the current database (including TOAST tables).
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW
+func (s *PgStats) PgStatAllTables() (PgStatAllTablesView, error) {
+	return s.fetchTables("pg_stat_all_tables")
+}
+
+// PgStatUserTables returns an array containing statistics about accesses
+// to each user-defined table in the current database (including TOAST tables).
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW
+func (s *PgStats) PgStatUserTables() (PgStatUserTablesView, error) {
+	return s.fetchTables("pg_stat_user_tables")
+}
+
+// PgStatSystemTables returns an array containing statistics about accesses
+// to each system table in the current database (including TOAST tables).
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW
+func (s *PgStats) PgStatSystemTables() (PgStatSystemTablesView, error) {
+	return s.fetchTables("pg_stat_sys_tables")
+}
+
 // PgStatAllIndexes returns an array containing statistics about accesses
 // to each index in the current database.
 // For more details, see:
