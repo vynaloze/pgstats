@@ -30,3 +30,22 @@ func TestPgStatIndexes(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestPgStatIoIndexes(t *testing.T) {
+	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
+	if err != nil {
+		t.Error(err)
+	}
+	all, err := s.PgStatIoAllIndexes()
+	if err != nil || len(all) == 0 {
+		t.Error(err)
+	}
+	usr, err := s.PgStatIoUserIndexes()
+	if err != nil || len(usr) == 0 {
+		t.Error(err)
+	}
+	sys, err := s.PgStatIoSystemIndexes()
+	if err != nil || len(sys) == 0 {
+		t.Error(err)
+	}
+}
