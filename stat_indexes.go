@@ -2,14 +2,14 @@ package pgstats
 
 import "database/sql"
 
-// PgStatAllIndexes represents content of pg_stat_all_indexes view
-type PgStatAllIndexes []PgStatIndexesRow
+// PgStatAllIndexesView represents content of pg_stat_all_indexes view
+type PgStatAllIndexesView []PgStatIndexesRow
 
-// PgStatUserIndexes represents content of pg_stat_user_indexes view
-type PgStatUserIndexes []PgStatIndexesRow
+// PgStatUserIndexesView represents content of pg_stat_user_indexes view
+type PgStatUserIndexesView []PgStatIndexesRow
 
-// PgStatSystemIndexes represents content of pg_stat_system_indexes view
-type PgStatSystemIndexes []PgStatIndexesRow
+// PgStatSystemIndexesView represents content of pg_stat_system_indexes view
+type PgStatSystemIndexesView []PgStatIndexesRow
 
 // PgStatIndexesRow represents schema of pg_stat_*_indexes views
 type PgStatIndexesRow struct {

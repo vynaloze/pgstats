@@ -18,7 +18,7 @@ func Connect(dbname string, user string, password string, options ...func(*conne
 // accesses to each index in the current database.
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-INDEXES-VIEW
-func (s *PgStats) PgStatAllIndexes() (PgStatAllIndexes, error) {
+func (s *PgStats) PgStatAllIndexes() (PgStatAllIndexesView, error) {
 	return s.fetchIndexes("pg_stat_all_indexes")
 }
 
@@ -26,13 +26,13 @@ func (s *PgStats) PgStatAllIndexes() (PgStatAllIndexes, error) {
 // accesses to each user-defined index in the current database.
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-INDEXES-VIEW
-func (s *PgStats) PgStatUserIndexes() (PgStatUserIndexes, error) {
+func (s *PgStats) PgStatUserIndexes() (PgStatUserIndexesView, error) {
 	return s.fetchIndexes("pg_stat_user_indexes")
 }
 
 // PgStatSystemIndexes returns an array containing statistics about
 // accesses to each system index in the current database.
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-INDEXES-VIEW
-func (s *PgStats) PgStatSystemIndexes() (PgStatSystemIndexes, error) {
+func (s *PgStats) PgStatSystemIndexes() (PgStatSystemIndexesView, error) {
 	return s.fetchIndexes("pg_stat_sys_indexes")
 }
