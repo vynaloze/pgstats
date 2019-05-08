@@ -5,11 +5,11 @@ import "database/sql"
 // PgStatIoAllIndexesView represents content of pg_statio_all_indexes view
 type PgStatIoAllIndexesView []PgStatIoIndexesRow
 
-// PgStatIoUserIndexesView represents content of pg_statio_user_indexes view
-type PgStatIoUserIndexesView []PgStatIoIndexesRow
-
 // PgStatIoSystemIndexesView represents content of pg_statio_system_indexes view
 type PgStatIoSystemIndexesView []PgStatIoIndexesRow
+
+// PgStatIoUserIndexesView represents content of pg_statio_user_indexes view
+type PgStatIoUserIndexesView []PgStatIoIndexesRow
 
 // PgStatIoIndexesRow represents schema of pg_statio_*_indexes views
 type PgStatIoIndexesRow struct {

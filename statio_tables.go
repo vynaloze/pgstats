@@ -7,11 +7,11 @@ import (
 // PgStatIoAllTablesView represents content of pg_statio_all_tables view
 type PgStatIoAllTablesView []PgStatIoTablesRow
 
-// PgStatIoUserTablesView represents content of pg_statio_user_tables view
-type PgStatIoUserTablesView []PgStatIoTablesRow
-
 // PgStatIoSystemTablesView represents content of pg_statio_system_tables view
 type PgStatIoSystemTablesView []PgStatIoTablesRow
+
+// PgStatIoUserTablesView represents content of pg_statio_user_tables view
+type PgStatIoUserTablesView []PgStatIoTablesRow
 
 // PgStatIoTablesRow represents schema of pg_statio_*_tables views
 type PgStatIoTablesRow struct {

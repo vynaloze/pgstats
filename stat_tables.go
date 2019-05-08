@@ -8,11 +8,11 @@ import (
 // PgStatAllTablesView represents content of pg_stat_all_tables view
 type PgStatAllTablesView []PgStatTablesRow
 
-// PgStatUserTablesView represents content of pg_stat_user_tables view
-type PgStatUserTablesView []PgStatTablesRow
-
 // PgStatSystemTablesView represents content of pg_stat_system_tables view
 type PgStatSystemTablesView []PgStatTablesRow
+
+// PgStatUserTablesView represents content of pg_stat_user_tables view
+type PgStatUserTablesView []PgStatTablesRow
 
 // PgStatTablesRow represents schema of pg_stat_*_tables views
 type PgStatTablesRow struct {
