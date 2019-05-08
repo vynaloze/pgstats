@@ -50,6 +50,25 @@ func TestPgStatIndexes(t *testing.T) {
 	}
 }
 
+func TestPgStatIoTables(t *testing.T) {
+	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
+	if err != nil {
+		t.Error(err)
+	}
+	all, err := s.PgStatIoAllTables()
+	if err != nil || len(all) == 0 {
+		t.Error(err)
+	}
+	usr, err := s.PgStatIoUserTables()
+	if err != nil || len(usr) == 0 {
+		t.Error(err)
+	}
+	sys, err := s.PgStatIoSystemTables()
+	if err != nil || len(sys) == 0 {
+		t.Error(err)
+	}
+}
+
 func TestPgStatIoIndexes(t *testing.T) {
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
