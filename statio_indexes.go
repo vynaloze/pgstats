@@ -32,7 +32,8 @@ type PgStatIoIndexesRow struct {
 func (s *PgStats) fetchIoIndexes(view string) ([]PgStatIoIndexesRow, error) {
 	data := make([]PgStatIoIndexesRow, 0)
 	db := s.conn.db
-	query := "select * from " + view
+	query := "select relid,indexrelid,schemaname,relname,indexrelname," +
+		"idx_blks_read,idx_blks_hit from " + view
 
 	rows, err := db.Query(query)
 	if err != nil {

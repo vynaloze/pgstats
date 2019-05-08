@@ -34,7 +34,8 @@ type PgStatIndexesRow struct {
 func (s *PgStats) fetchIndexes(view string) ([]PgStatIndexesRow, error) {
 	data := make([]PgStatIndexesRow, 0)
 	db := s.conn.db
-	query := "select * from " + view
+	query := "select relid,indexrelid,schemaname,relname,indexrelname," +
+		"idx_scan,idx_tup_read,idx_tup_fetch from " + view
 
 	rows, err := db.Query(query)
 	if err != nil {
