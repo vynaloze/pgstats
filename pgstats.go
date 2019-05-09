@@ -38,6 +38,30 @@ func (s *PgStats) PgStatUserTables() (PgStatUserTablesView, error) {
 	return s.fetchTables("pg_stat_user_tables")
 }
 
+// PgStatXactAllTables returns an array containing statistics about accesses
+// to each table in the current database (including TOAST tables),
+// but counts only actions taken so far within the current transaction
+// (which are not yet included in pg_stat_all_tables and related views).
+func (s *PgStats) PgStatXactAllTables() (PgStatXactAllTablesView, error) {
+	return s.fetchXactTables("pg_stat_xact_all_tables")
+}
+
+// PgStatXactSystemTables returns an array containing statistics about accesses
+// to each system table in the current database (including TOAST tables),
+// but counts only actions taken so far within the current transaction
+// (which are not yet included in pg_stat_all_tables and related views).
+func (s *PgStats) PgStatXactSystemTables() (PgStatXactSystemTablesView, error) {
+	return s.fetchXactTables("pg_stat_xact_sys_tables")
+}
+
+// PgStatXactUserTables returns an array containing statistics about accesses
+// to each user-defined table in the current database (including TOAST tables),
+// but counts only actions taken so far within the current transaction
+// (which are not yet included in pg_stat_all_tables and related views).
+func (s *PgStats) PgStatXactUserTables() (PgStatXactUserTablesView, error) {
+	return s.fetchXactTables("pg_stat_xact_user_tables")
+}
+
 // PgStatAllIndexes returns an array containing statistics about accesses
 // to each index in the current database.
 // For more details, see:

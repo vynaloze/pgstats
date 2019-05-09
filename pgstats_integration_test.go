@@ -31,6 +31,25 @@ func TestPgStatTables(t *testing.T) {
 	}
 }
 
+func TestPgXactStatTables(t *testing.T) {
+	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
+	if err != nil {
+		t.Error(err)
+	}
+	all, err := s.PgStatXactAllTables()
+	if err != nil || len(all) == 0 {
+		t.Error(err)
+	}
+	sys, err := s.PgStatXactSystemTables()
+	if err != nil || len(sys) == 0 {
+		t.Error(err)
+	}
+	usr, err := s.PgStatXactUserTables()
+	if err != nil || len(usr) == 0 {
+		t.Error(err)
+	}
+}
+
 func TestPgStatIndexes(t *testing.T) {
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
