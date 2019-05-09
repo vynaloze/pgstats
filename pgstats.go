@@ -14,7 +14,15 @@ func Connect(dbname string, user string, password string, options ...func(*conne
 	return s, err
 }
 
-// PgStatAllTables returns an array containing statistics about accesses
+// PgStatDatabase returns a slice containing database-wide statistics about
+// each database in the cluster.
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-DATABASE-VIEW
+func (s *PgStats) PgStatDatabase() (PgStatDatabaseView, error) {
+	return s.fetchDatabases()
+}
+
+// PgStatAllTables returns a slice containing statistics about accesses
 // to each table in the current database (including TOAST tables).
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW
@@ -22,7 +30,7 @@ func (s *PgStats) PgStatAllTables() (PgStatAllTablesView, error) {
 	return s.fetchTables("pg_stat_all_tables")
 }
 
-// PgStatSystemTables returns an array containing statistics about accesses
+// PgStatSystemTables returns a slice containing statistics about accesses
 // to each system table in the current database (including TOAST tables).
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW
@@ -30,7 +38,7 @@ func (s *PgStats) PgStatSystemTables() (PgStatSystemTablesView, error) {
 	return s.fetchTables("pg_stat_sys_tables")
 }
 
-// PgStatUserTables returns an array containing statistics about accesses
+// PgStatUserTables returns a slice containing statistics about accesses
 // to each user-defined table in the current database (including TOAST tables).
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW
@@ -38,7 +46,7 @@ func (s *PgStats) PgStatUserTables() (PgStatUserTablesView, error) {
 	return s.fetchTables("pg_stat_user_tables")
 }
 
-// PgStatXactAllTables returns an array containing statistics about accesses
+// PgStatXactAllTables returns a slice containing statistics about accesses
 // to each table in the current database (including TOAST tables),
 // but counts only actions taken so far within the current transaction
 // (which are not yet included in pg_stat_all_tables and related views).
@@ -46,7 +54,7 @@ func (s *PgStats) PgStatXactAllTables() (PgStatXactAllTablesView, error) {
 	return s.fetchXactTables("pg_stat_xact_all_tables")
 }
 
-// PgStatXactSystemTables returns an array containing statistics about accesses
+// PgStatXactSystemTables returns a slice containing statistics about accesses
 // to each system table in the current database (including TOAST tables),
 // but counts only actions taken so far within the current transaction
 // (which are not yet included in pg_stat_all_tables and related views).
@@ -54,7 +62,7 @@ func (s *PgStats) PgStatXactSystemTables() (PgStatXactSystemTablesView, error) {
 	return s.fetchXactTables("pg_stat_xact_sys_tables")
 }
 
-// PgStatXactUserTables returns an array containing statistics about accesses
+// PgStatXactUserTables returns a slice containing statistics about accesses
 // to each user-defined table in the current database (including TOAST tables),
 // but counts only actions taken so far within the current transaction
 // (which are not yet included in pg_stat_all_tables and related views).
@@ -62,7 +70,7 @@ func (s *PgStats) PgStatXactUserTables() (PgStatXactUserTablesView, error) {
 	return s.fetchXactTables("pg_stat_xact_user_tables")
 }
 
-// PgStatAllIndexes returns an array containing statistics about accesses
+// PgStatAllIndexes returns a slice containing statistics about accesses
 // to each index in the current database.
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-INDEXES-VIEW
@@ -70,7 +78,7 @@ func (s *PgStats) PgStatAllIndexes() (PgStatAllIndexesView, error) {
 	return s.fetchIndexes("pg_stat_all_indexes")
 }
 
-// PgStatSystemIndexes returns an array containing statistics about accesses
+// PgStatSystemIndexes returns a slice containing statistics about accesses
 // to each system index in the current database.
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-INDEXES-VIEW
@@ -78,7 +86,7 @@ func (s *PgStats) PgStatSystemIndexes() (PgStatSystemIndexesView, error) {
 	return s.fetchIndexes("pg_stat_sys_indexes")
 }
 
-// PgStatUserIndexes returns an array containing statistics about accesses
+// PgStatUserIndexes returns a slice containing statistics about accesses
 // to each user-defined index in the current database.
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-INDEXES-VIEW
@@ -86,7 +94,7 @@ func (s *PgStats) PgStatUserIndexes() (PgStatUserIndexesView, error) {
 	return s.fetchIndexes("pg_stat_user_indexes")
 }
 
-// PgStatIoAllTables returns an array containing statistics about I/O
+// PgStatIoAllTables returns a slice containing statistics about I/O
 // on each table in the current database (including TOAST tables).
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-TABLES-VIEW
@@ -94,7 +102,7 @@ func (s *PgStats) PgStatIoAllTables() (PgStatIoAllTablesView, error) {
 	return s.fetchIoTables("pg_statio_all_tables")
 }
 
-// PgStatIoSystemTables returns an array containing statistics about I/O
+// PgStatIoSystemTables returns a slice containing statistics about I/O
 // on each system table in the current database (including TOAST tables).
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-TABLES-VIEW
@@ -102,7 +110,7 @@ func (s *PgStats) PgStatIoSystemTables() (PgStatIoSystemTablesView, error) {
 	return s.fetchIoTables("pg_statio_sys_tables")
 }
 
-// PgStatIoUserTables returns an array containing statistics about I/O
+// PgStatIoUserTables returns a slice containing statistics about I/O
 // on each user-defined table in the current database (including TOAST tables).
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-TABLES-VIEW
@@ -110,7 +118,7 @@ func (s *PgStats) PgStatIoUserTables() (PgStatIoUserTablesView, error) {
 	return s.fetchIoTables("pg_statio_user_tables")
 }
 
-// PgStatIoAllIndexes returns an array containing statistics about I/O
+// PgStatIoAllIndexes returns a slice containing statistics about I/O
 // on each index in the current database.
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-INDEXES-VIEW
@@ -118,7 +126,7 @@ func (s *PgStats) PgStatIoAllIndexes() (PgStatIoAllIndexesView, error) {
 	return s.fetchIoIndexes("pg_statio_all_indexes")
 }
 
-// PgStatIoSystemIndexes returns an array containing statistics about I/O
+// PgStatIoSystemIndexes returns a slice containing statistics about I/O
 // on each system index in the current database.
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-INDEXES-VIEW
@@ -126,7 +134,7 @@ func (s *PgStats) PgStatIoSystemIndexes() (PgStatIoSystemIndexesView, error) {
 	return s.fetchIoIndexes("pg_statio_sys_indexes")
 }
 
-// PgStatIoUserIndexes returns an array containing statistics about I/O
+// PgStatIoUserIndexes returns a slice containing statistics about I/O
 // on each user-defined index in the current database.
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-INDEXES-VIEW
@@ -134,7 +142,7 @@ func (s *PgStats) PgStatIoUserIndexes() (PgStatIoUserIndexesView, error) {
 	return s.fetchIoIndexes("pg_statio_user_indexes")
 }
 
-// PgStatIoAllSequences returns an array containing statistics about I/O
+// PgStatIoAllSequences returns a slice containing statistics about I/O
 // on each sequence in the current database.
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-SEQUENCES-VIEW
@@ -142,7 +150,7 @@ func (s *PgStats) PgStatIoAllSequences() (PgStatIoAllSequencesView, error) {
 	return s.fetchIoSequences("pg_statio_all_sequences")
 }
 
-// PgStatIoSystemSequences returns an array containing statistics about I/O
+// PgStatIoSystemSequences returns a slice containing statistics about I/O
 // on each system sequence in the current database.
 // (Presently, no system sequences are defined, so this view is always empty.)
 // For more details, see:
@@ -151,7 +159,7 @@ func (s *PgStats) PgStatIoSystemSequences() (PgStatIoSystemSequencesView, error)
 	return s.fetchIoSequences("pg_statio_sys_sequences")
 }
 
-// PgStatIoUserSequences returns an array containing statistics about I/O
+// PgStatIoUserSequences returns a slice containing statistics about I/O
 // on each user-defined sequence in the current database.
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-SEQUENCES-VIEW
@@ -159,7 +167,7 @@ func (s *PgStats) PgStatIoUserSequences() (PgStatIoUserSequencesView, error) {
 	return s.fetchIoSequences("pg_statio_user_sequences")
 }
 
-// PgStatUserFunctions returns an array containing statistics about executions
+// PgStatUserFunctions returns a slice containing statistics about executions
 // of each tracked function in the current database.
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-USER-FUNCTIONS-VIEW
@@ -167,7 +175,7 @@ func (s *PgStats) PgStatUserFunctions() (PgStatUserFunctionsView, error) {
 	return s.fetchFunctions("pg_stat_user_functions")
 }
 
-// PgStatUserFunctions returns an array containing statistics about executions
+// PgStatUserFunctions returns a slice containing statistics about executions
 // of each tracked function in the current database,
 // but counts only calls during the current transaction
 // (which are not yet included in pg_stat_user_functions).
