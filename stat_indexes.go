@@ -32,7 +32,6 @@ type PgStatIndexesRow struct {
 }
 
 func (s *PgStats) fetchIndexes(view string) ([]PgStatIndexesRow, error) {
-	data := make([]PgStatIndexesRow, 0)
 	db := s.conn.db
 	query := "select relid,indexrelid,schemaname,relname,indexrelname," +
 		"idx_scan,idx_tup_read,idx_tup_fetch from " + view
@@ -43,6 +42,7 @@ func (s *PgStats) fetchIndexes(view string) ([]PgStatIndexesRow, error) {
 	}
 	defer rows.Close()
 
+	data := make([]PgStatIndexesRow, 0)
 	for rows.Next() {
 		row := new(PgStatIndexesRow)
 		err := rows.Scan(&row.RelId, &row.IndexRelId, &row.SchemaName, &row.RelName, &row.IndexRelName,
@@ -52,9 +52,5 @@ func (s *PgStats) fetchIndexes(view string) ([]PgStatIndexesRow, error) {
 		}
 		data = append(data, *row)
 	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return data, nil
+	return data, rows.Err()
 }

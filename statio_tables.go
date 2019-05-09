@@ -40,7 +40,6 @@ type PgStatIoTablesRow struct {
 }
 
 func (s *PgStats) fetchIoTables(view string) ([]PgStatIoTablesRow, error) {
-	data := make([]PgStatIoTablesRow, 0)
 	db := s.conn.db
 	query := "select relid,schemaname,relname," +
 		"heap_blks_read,heap_blks_hit," +
@@ -54,6 +53,7 @@ func (s *PgStats) fetchIoTables(view string) ([]PgStatIoTablesRow, error) {
 	}
 	defer rows.Close()
 
+	data := make([]PgStatIoTablesRow, 0)
 	for rows.Next() {
 		row := new(PgStatIoTablesRow)
 		err := rows.Scan(&row.RelId, &row.SchemaName, &row.RelName,
@@ -66,9 +66,5 @@ func (s *PgStats) fetchIoTables(view string) ([]PgStatIoTablesRow, error) {
 		}
 		data = append(data, *row)
 	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return data, nil
+	return data, rows.Err()
 }

@@ -26,7 +26,6 @@ type PgStatIoSequencesRow struct {
 }
 
 func (s *PgStats) fetchIoSequences(view string) ([]PgStatIoSequencesRow, error) {
-	data := make([]PgStatIoSequencesRow, 0)
 	db := s.conn.db
 	query := "select relid,schemaname,relname,blks_read,blks_hit from " + view
 
@@ -36,6 +35,7 @@ func (s *PgStats) fetchIoSequences(view string) ([]PgStatIoSequencesRow, error) 
 	}
 	defer rows.Close()
 
+	data := make([]PgStatIoSequencesRow, 0)
 	for rows.Next() {
 		row := new(PgStatIoSequencesRow)
 		err := rows.Scan(&row.RelId, &row.SchemaName, &row.RelName, &row.BlksRead, &row.BlksHit)
@@ -44,9 +44,5 @@ func (s *PgStats) fetchIoSequences(view string) ([]PgStatIoSequencesRow, error) 
 		}
 		data = append(data, *row)
 	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return data, nil
+	return data, rows.Err()
 }

@@ -26,7 +26,6 @@ type PgStatDatabaseConflictsRow struct {
 }
 
 func (s *PgStats) fetchDatabaseConflicts() ([]PgStatDatabaseConflictsRow, error) {
-	data := make([]PgStatDatabaseConflictsRow, 0)
 	db := s.conn.db
 	query := "select datid,datname," +
 		"confl_tablespace,confl_lock,confl_snapshot,confl_bufferpin,confl_deadlock" +
@@ -38,6 +37,7 @@ func (s *PgStats) fetchDatabaseConflicts() ([]PgStatDatabaseConflictsRow, error)
 	}
 	defer rows.Close()
 
+	data := make([]PgStatDatabaseConflictsRow, 0)
 	for rows.Next() {
 		row := new(PgStatDatabaseConflictsRow)
 		err := rows.Scan(&row.DatId, &row.DatName,
@@ -47,9 +47,5 @@ func (s *PgStats) fetchDatabaseConflicts() ([]PgStatDatabaseConflictsRow, error)
 		}
 		data = append(data, *row)
 	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return data, nil
+	return data, rows.Err()
 }

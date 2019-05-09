@@ -61,7 +61,6 @@ type PgStatDatabaseRow struct {
 }
 
 func (s *PgStats) fetchDatabases() ([]PgStatDatabaseRow, error) {
-	data := make([]PgStatDatabaseRow, 0)
 	db := s.conn.db
 	query := "select datid,datname,numbackends,xact_commit,xact_rollback," +
 		"blks_read,blks_hit,tup_returned,tup_fetched,tup_inserted," +
@@ -74,6 +73,7 @@ func (s *PgStats) fetchDatabases() ([]PgStatDatabaseRow, error) {
 	}
 	defer rows.Close()
 
+	data := make([]PgStatDatabaseRow, 0)
 	for rows.Next() {
 		row := new(PgStatDatabaseRow)
 		err := rows.Scan(&row.DatId, &row.DatName, &row.NumBackends, &row.XactCommit, &row.XactRollback,
@@ -85,9 +85,5 @@ func (s *PgStats) fetchDatabases() ([]PgStatDatabaseRow, error) {
 		}
 		data = append(data, *row)
 	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return data, nil
+	return data, rows.Err()
 }

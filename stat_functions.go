@@ -25,7 +25,6 @@ type PgStatFunctionsRow struct {
 }
 
 func (s *PgStats) fetchFunctions(view string) ([]PgStatFunctionsRow, error) {
-	data := make([]PgStatFunctionsRow, 0)
 	db := s.conn.db
 	query := "select funcid,schemaname,funcname,calls,total_time,self_time from " + view
 
@@ -35,6 +34,7 @@ func (s *PgStats) fetchFunctions(view string) ([]PgStatFunctionsRow, error) {
 	}
 	defer rows.Close()
 
+	data := make([]PgStatFunctionsRow, 0)
 	for rows.Next() {
 		row := new(PgStatFunctionsRow)
 		err := rows.Scan(&row.FuncId, &row.SchemaName, &row.FuncName, &row.Calls, &row.TotalTime, &row.SelfTime)
@@ -43,9 +43,5 @@ func (s *PgStats) fetchFunctions(view string) ([]PgStatFunctionsRow, error) {
 		}
 		data = append(data, *row)
 	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return data, nil
+	return data, rows.Err()
 }

@@ -40,7 +40,6 @@ type PgStatXactTablesRow struct {
 }
 
 func (s *PgStats) fetchXactTables(view string) ([]PgStatXactTablesRow, error) {
-	data := make([]PgStatXactTablesRow, 0)
 	db := s.conn.db
 	query := "select relid,schemaname,relname,seq_scan,seq_tup_read," +
 		"idx_scan,idx_tup_fetch,n_tup_ins,n_tup_upd,n_tup_del,n_tup_hot_upd from " + view
@@ -51,6 +50,7 @@ func (s *PgStats) fetchXactTables(view string) ([]PgStatXactTablesRow, error) {
 	}
 	defer rows.Close()
 
+	data := make([]PgStatXactTablesRow, 0)
 	for rows.Next() {
 		row := new(PgStatXactTablesRow)
 		err := rows.Scan(&row.RelId, &row.SchemaName, &row.RelName, &row.SeqScan, &row.SeqTupRead,
@@ -60,9 +60,5 @@ func (s *PgStats) fetchXactTables(view string) ([]PgStatXactTablesRow, error) {
 		}
 		data = append(data, *row)
 	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return data, nil
+	return data, rows.Err()
 }
