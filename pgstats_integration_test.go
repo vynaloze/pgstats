@@ -18,17 +18,11 @@ func TestPgStatTables(t *testing.T) {
 		t.Error(err)
 	}
 	all, err := s.PgStatAllTables()
-	if err != nil || len(all) == 0 {
-		t.Error(err)
-	}
+	validate(t, len(all), err)
 	sys, err := s.PgStatSystemTables()
-	if err != nil || len(sys) == 0 {
-		t.Error(err)
-	}
+	validate(t, len(sys), err)
 	usr, err := s.PgStatUserTables()
-	if err != nil || len(usr) == 0 {
-		t.Error(err)
-	}
+	validate(t, len(usr), err)
 }
 
 func TestPgXactStatTables(t *testing.T) {
@@ -37,17 +31,11 @@ func TestPgXactStatTables(t *testing.T) {
 		t.Error(err)
 	}
 	all, err := s.PgStatXactAllTables()
-	if err != nil || len(all) == 0 {
-		t.Error(err)
-	}
+	validate(t, len(all), err)
 	sys, err := s.PgStatXactSystemTables()
-	if err != nil || len(sys) == 0 {
-		t.Error(err)
-	}
+	validate(t, len(sys), err)
 	usr, err := s.PgStatXactUserTables()
-	if err != nil || len(usr) == 0 {
-		t.Error(err)
-	}
+	validate(t, len(usr), err)
 }
 
 func TestPgStatIndexes(t *testing.T) {
@@ -56,17 +44,11 @@ func TestPgStatIndexes(t *testing.T) {
 		t.Error(err)
 	}
 	all, err := s.PgStatAllIndexes()
-	if err != nil || len(all) == 0 {
-		t.Error(err)
-	}
+	validate(t, len(all), err)
 	sys, err := s.PgStatSystemIndexes()
-	if err != nil || len(sys) == 0 {
-		t.Error(err)
-	}
+	validate(t, len(sys), err)
 	usr, err := s.PgStatUserIndexes()
-	if err != nil || len(usr) == 0 {
-		t.Error(err)
-	}
+	validate(t, len(usr), err)
 }
 
 func TestPgStatIoTables(t *testing.T) {
@@ -75,17 +57,11 @@ func TestPgStatIoTables(t *testing.T) {
 		t.Error(err)
 	}
 	all, err := s.PgStatIoAllTables()
-	if err != nil || len(all) == 0 {
-		t.Error(err)
-	}
+	validate(t, len(all), err)
 	sys, err := s.PgStatIoSystemTables()
-	if err != nil || len(sys) == 0 {
-		t.Error(err)
-	}
+	validate(t, len(sys), err)
 	usr, err := s.PgStatIoUserTables()
-	if err != nil || len(usr) == 0 {
-		t.Error(err)
-	}
+	validate(t, len(usr), err)
 }
 
 func TestPgStatIoIndexes(t *testing.T) {
@@ -94,15 +70,33 @@ func TestPgStatIoIndexes(t *testing.T) {
 		t.Error(err)
 	}
 	all, err := s.PgStatIoAllIndexes()
-	if err != nil || len(all) == 0 {
-		t.Error(err)
-	}
+	validate(t, len(all), err)
 	sys, err := s.PgStatIoSystemIndexes()
-	if err != nil || len(sys) == 0 {
+	validate(t, len(sys), err)
+	usr, err := s.PgStatIoUserIndexes()
+	validate(t, len(usr), err)
+}
+
+func TestPgStatIoSequences(t *testing.T) {
+	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
+	if err != nil {
 		t.Error(err)
 	}
-	usr, err := s.PgStatIoUserIndexes()
-	if err != nil || len(usr) == 0 {
+	all, err := s.PgStatIoAllSequences()
+	validate(t, len(all), err)
+	_, err = s.PgStatIoSystemSequences()
+	if err != nil {
 		t.Error(err)
+	}
+	usr, err := s.PgStatIoUserSequences()
+	validate(t, len(usr), err)
+}
+
+func validate(t *testing.T, len int, err error) {
+	if err != nil {
+		t.Error(err)
+	}
+	if len == 0 {
+		t.Error("No data returned by query")
 	}
 }

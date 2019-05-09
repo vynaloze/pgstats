@@ -133,3 +133,28 @@ func (s *PgStats) PgStatIoSystemIndexes() (PgStatIoSystemIndexesView, error) {
 func (s *PgStats) PgStatIoUserIndexes() (PgStatIoUserIndexesView, error) {
 	return s.fetchIoIndexes("pg_statio_user_indexes")
 }
+
+// PgStatIoAllSequences returns an array containing statistics about I/O
+// on each sequence in the current database.
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-SEQUENCES-VIEW
+func (s *PgStats) PgStatIoAllSequences() (PgStatIoAllSequencesView, error) {
+	return s.fetchIoSequences("pg_statio_all_sequences")
+}
+
+// PgStatIoSystemSequences returns an array containing statistics about I/O
+// on each system sequence in the current database.
+// (Presently, no system sequences are defined, so this view is always empty.)
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-SEQUENCES-VIEW
+func (s *PgStats) PgStatIoSystemSequences() (PgStatIoSystemSequencesView, error) {
+	return s.fetchIoSequences("pg_statio_sys_sequences")
+}
+
+// PgStatIoUserSequences returns an array containing statistics about I/O
+// on each user-defined sequence in the current database.
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-SEQUENCES-VIEW
+func (s *PgStats) PgStatIoUserSequences() (PgStatIoUserSequencesView, error) {
+	return s.fetchIoSequences("pg_statio_user_sequences")
+}
