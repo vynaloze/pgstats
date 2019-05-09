@@ -12,6 +12,17 @@ var dbname = flag.String("dbname", "", "Test database name")
 var user = flag.String("user", "", "Test username")
 var password = flag.String("password", "", "Test password")
 
+func TestPgBgWriter(t *testing.T) {
+	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = s.PgStatBgWriter()
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestPgStatDatabase(t *testing.T) {
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {

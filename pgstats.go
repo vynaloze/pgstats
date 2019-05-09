@@ -14,6 +14,14 @@ func Connect(dbname string, user string, password string, options ...func(*conne
 	return s, err
 }
 
+// PgStatBgWriter returns a single struct, containing global data for the cluster,
+// showing statistics about the background writer process's activity.
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-BGWRITER-VIEW
+func (s *PgStats) PgStatBgWriter() (PgStatBgWriterView, error) {
+	return s.fetchBgWriter()
+}
+
 // PgStatDatabase returns a slice containing database-wide statistics for each database in the cluster.
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-DATABASE-VIEW
