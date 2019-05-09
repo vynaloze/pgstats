@@ -158,3 +158,19 @@ func (s *PgStats) PgStatIoSystemSequences() (PgStatIoSystemSequencesView, error)
 func (s *PgStats) PgStatIoUserSequences() (PgStatIoUserSequencesView, error) {
 	return s.fetchIoSequences("pg_statio_user_sequences")
 }
+
+// PgStatUserFunctions returns an array containing statistics about executions
+// of each tracked function in the current database.
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-USER-FUNCTIONS-VIEW
+func (s *PgStats) PgStatUserFunctions() (PgStatUserFunctionsView, error) {
+	return s.fetchFunctions("pg_stat_user_functions")
+}
+
+// PgStatUserFunctions returns an array containing statistics about executions
+// of each tracked function in the current database,
+// but counts only calls during the current transaction
+// (which are not yet included in pg_stat_user_functions).
+func (s *PgStats) PgStatXactUserFunctions() (PgStatXactUserFunctionsView, error) {
+	return s.fetchFunctions("pg_stat_xact_user_functions")
+}

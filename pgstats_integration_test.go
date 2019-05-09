@@ -92,6 +92,19 @@ func TestPgStatIoSequences(t *testing.T) {
 	validate(t, len(usr), err)
 }
 
+func TestPgStatFunctions(t *testing.T) {
+	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
+	if err != nil {
+		t.Error(err)
+	}
+	usr, err := s.PgStatUserFunctions()
+	validate(t, len(usr), err)
+	_, err = s.PgStatXactUserFunctions()
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func validate(t *testing.T, len int, err error) {
 	if err != nil {
 		t.Error(err)
