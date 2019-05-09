@@ -21,6 +21,15 @@ func TestPgStatDatabase(t *testing.T) {
 	validate(t, len(d), err)
 }
 
+func TestPgStatDatabaseConflicts(t *testing.T) {
+	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
+	if err != nil {
+		t.Error(err)
+	}
+	d, err := s.PgStatDatabaseConflicts()
+	validate(t, len(d), err)
+}
+
 func TestPgStatTables(t *testing.T) {
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {

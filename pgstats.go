@@ -14,12 +14,20 @@ func Connect(dbname string, user string, password string, options ...func(*conne
 	return s, err
 }
 
-// PgStatDatabase returns a slice containing database-wide statistics about
-// each database in the cluster.
+// PgStatDatabase returns a slice containing database-wide statistics for each database in the cluster.
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-DATABASE-VIEW
 func (s *PgStats) PgStatDatabase() (PgStatDatabaseView, error) {
 	return s.fetchDatabases()
+}
+
+// PgStatDatabaseConflicts returns a slice containing database-wide statistics for each database in the cluster about
+// query cancels occurring due to conflicts with recovery on standby servers.
+// This will only contain information on standby servers, since conflicts do not occur on master servers.
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-DATABASE-CONFLICTS-VIEW
+func (s *PgStats) PgStatDatabaseConflicts() (PgStatDatabaseConflictsView, error) {
+	return s.fetchDatabaseConflicts()
 }
 
 // PgStatAllTables returns a slice containing statistics about accesses
