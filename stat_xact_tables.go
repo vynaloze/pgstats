@@ -16,27 +16,27 @@ type PgStatXactUserTablesView []PgStatXactTablesRow
 // PgStatXactTablesRow represents schema of pg_stat_xact_*_tables views
 type PgStatXactTablesRow struct {
 	// OID of a table
-	RelId int64
+	RelId int64 `json:"relid"`
 	// Name of the schema that this table is in
-	SchemaName string
+	SchemaName string `json:"schemaname"`
 	// Name of this table
-	RelName string
+	RelName string `json:"relname"`
 	// Number of sequential scans initiated on this table
-	SeqScan sql.NullInt64
+	SeqScan sql.NullInt64 `json:"seq_scan"`
 	// Number of live rows fetched by sequential scans
-	SeqTupRead sql.NullInt64
+	SeqTupRead sql.NullInt64 `json:"seq_tup_read"`
 	// Number of index scans initiated on this table
-	IdxScan sql.NullInt64
+	IdxScan sql.NullInt64 `json:"idx_scan"`
 	// Number of live rows fetched by index scans
-	IdxTupFetch sql.NullInt64
+	IdxTupFetch sql.NullInt64 `json:"idx_tup_fetch"`
 	// Number of rows inserted
-	NTupIns sql.NullInt64
+	NTupIns sql.NullInt64 `json:"n_tup_ins"`
 	// Number of rows updated (includes HOT updated rows)
-	NTupUpd sql.NullInt64
+	NTupUpd sql.NullInt64 `json:"n_tup_upd"`
 	// Number of rows deleted
-	NTupDel sql.NullInt64
+	NTupDel sql.NullInt64 `json:"n_tup_del"`
 	// Number of rows HOT updated (i.e., with no separate index update required)
-	NTupHotUpd sql.NullInt64
+	NTupHotUpd sql.NullInt64 `json:"n_tup_hot_upd"`
 }
 
 func (s *PgStats) fetchXactTables(view string) ([]PgStatXactTablesRow, error) {

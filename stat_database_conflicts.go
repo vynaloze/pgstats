@@ -10,19 +10,19 @@ type PgStatDatabaseConflictsView []PgStatDatabaseConflictsRow
 // PgStatDatabaseConflictsRow represents schema of pg_stat_database_conflicts view
 type PgStatDatabaseConflictsRow struct {
 	// OID of a database
-	DatId int64
+	DatId int64 `json:"datid"`
 	// Name of this database
-	DatName string
+	DatName string `json:"datname"`
 	// Number of queries in this database that have been canceled due to dropped tablespaces
-	ConflTablespace sql.NullInt64
+	ConflTablespace sql.NullInt64 `json:"confl_tablespace"`
 	// Number of queries in this database that have been canceled due to lock timeouts
-	ConflLock sql.NullInt64
+	ConflLock sql.NullInt64 `json:"confl_lock"`
 	// Number of queries in this database that have been canceled due to old snapshots
-	ConflSnapshot sql.NullInt64
+	ConflSnapshot sql.NullInt64 `json:"confl_snapshot"`
 	// Number of queries in this database that have been canceled due to pinned buffers
-	ConflBufferpin sql.NullInt64
+	ConflBufferpin sql.NullInt64 `json:"confl_bufferpin"`
 	// Number of queries in this database that have been canceled due to deadlocks
-	ConflDeadlock sql.NullInt64
+	ConflDeadlock sql.NullInt64 `json:"confl_deadlock"`
 }
 
 func (s *PgStats) fetchDatabaseConflicts() ([]PgStatDatabaseConflictsRow, error) {

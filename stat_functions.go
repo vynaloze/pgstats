@@ -11,17 +11,17 @@ type PgStatXactUserFunctionsView []PgStatFunctionsRow
 // PgStatFunctionsRow represents schema of pg_stat*_user_functions views
 type PgStatFunctionsRow struct {
 	// OID of a function
-	FuncId int64
+	FuncId int64 `json:"funcid"`
 	// Name of the schema this function is in
-	SchemaName string
+	SchemaName string `json:"schemaname"`
 	// Name of this function
-	FuncName string
+	FuncName string `json:"funcname"`
 	// Number of times this function has been called
-	Calls sql.NullInt64
+	Calls sql.NullInt64 `json:"calls"`
 	// Total time spent in this function and all other functions called by it, in milliseconds
-	TotalTime sql.NullFloat64
+	TotalTime sql.NullFloat64 `json:"total_time"`
 	// Total time spent in this function itself, not including other functions called by it, in milliseconds
-	SelfTime sql.NullFloat64
+	SelfTime sql.NullFloat64 `json:"self_time"`
 }
 
 func (s *PgStats) fetchFunctions(view string) ([]PgStatFunctionsRow, error) {

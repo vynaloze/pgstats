@@ -14,15 +14,15 @@ type PgStatIoUserSequencesView []PgStatIoSequencesRow
 // PgStatIoSequencesRow represents schema of pg_statio_*_sequences views
 type PgStatIoSequencesRow struct {
 	// OID of a sequence
-	RelId int64
+	RelId int64 `json:"relid"`
 	// Name of the schema this sequence is in
-	SchemaName string
+	SchemaName string `json:"schemaname"`
 	// Name of this sequence
-	RelName string
+	RelName string `json:"relname"`
 	// Number of disk blocks read from this sequence
-	BlksRead sql.NullInt64
+	BlksRead sql.NullInt64 `json:"blks_read"`
 	// Number of buffer hits in this sequence
-	BlksHit sql.NullInt64
+	BlksHit sql.NullInt64 `json:"blks_hit"`
 }
 
 func (s *PgStats) fetchIoSequences(view string) ([]PgStatIoSequencesRow, error) {

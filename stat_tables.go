@@ -17,49 +17,49 @@ type PgStatUserTablesView []PgStatTablesRow
 // PgStatTablesRow represents schema of pg_stat_*_tables views
 type PgStatTablesRow struct {
 	// OID of a table
-	RelId int64
+	RelId int64 `json:"relid"`
 	// Name of the schema that this table is in
-	SchemaName string
+	SchemaName string `json:"schemaname"`
 	// Name of this table
-	RelName string
+	RelName string `json:"relname"`
 	// Number of sequential scans initiated on this table
-	SeqScan sql.NullInt64
+	SeqScan sql.NullInt64 `json:"seq_scan"`
 	// Number of live rows fetched by sequential scans
-	SeqTupRead sql.NullInt64
+	SeqTupRead sql.NullInt64 `json:"seq_tup_read"`
 	// Number of index scans initiated on this table
-	IdxScan sql.NullInt64
+	IdxScan sql.NullInt64 `json:"idx_scan"`
 	// Number of live rows fetched by index scans
-	IdxTupFetch sql.NullInt64
+	IdxTupFetch sql.NullInt64 `json:"idx_tup_fetch"`
 	// Number of rows inserted
-	NTupIns sql.NullInt64
+	NTupIns sql.NullInt64 `json:"n_tup_ins"`
 	// Number of rows updated (includes HOT updated rows)
-	NTupUpd sql.NullInt64
+	NTupUpd sql.NullInt64 `json:"n_tup_upd"`
 	// Number of rows deleted
-	NTupDel sql.NullInt64
+	NTupDel sql.NullInt64 `json:"n_tup_del"`
 	// Number of rows HOT updated (i.e., with no separate index update required)
-	NTupHotUpd sql.NullInt64
+	NTupHotUpd sql.NullInt64 `json:"n_tup_hot_upd"`
 	// Estimated number of live rows
-	NLiveTup sql.NullInt64
+	NLiveTup sql.NullInt64 `json:"n_live_tup"`
 	// Estimated number of dead rows
-	NDeadTup sql.NullInt64
+	NDeadTup sql.NullInt64 `json:"n_dead_tup"`
 	// Estimated number of rows modified since this table was last analyzed
-	NModSinceAnalyze sql.NullInt64
+	NModSinceAnalyze sql.NullInt64 `json:"n_mod_since_analyze"`
 	// Last time at which this table was manually vacuumed (not counting VACUUM FULL)
-	LastVacuum pq.NullTime
+	LastVacuum pq.NullTime `json:"last_vacuum"`
 	// Last time at which this table was vacuumed by the autovacuum daemon
-	LastAutovacuum pq.NullTime
+	LastAutovacuum pq.NullTime `json:"last_autovacuum"`
 	// Last time at which this table was manually analyzed
-	LastAnalyze pq.NullTime
+	LastAnalyze pq.NullTime `json:"last_analyze"`
 	// Last time at which this table was analyzed by the autovacuum daemon
-	LastAutoanalyze pq.NullTime
+	LastAutoanalyze pq.NullTime `json:"last_autoanalyze"`
 	// Number of times this table has been manually vacuumed (not counting VACUUM FULL)
-	VacuumCount sql.NullInt64
+	VacuumCount sql.NullInt64 `json:"vacuum_count"`
 	// Number of times this table has been vacuumed by the autovacuum daemon
-	AutovacuumCount sql.NullInt64
+	AutovacuumCount sql.NullInt64 `json:"autovacuum_count"`
 	// Number of times this table has been manually analyzed
-	AnalyzeCount sql.NullInt64
+	AnalyzeCount sql.NullInt64 `json:"analyze_count"`
 	// Number of times this table has been analyzed by the autovacuum daemon
-	AutoanalyzeCount sql.NullInt64
+	AutoanalyzeCount sql.NullInt64 `json:"autoanalyze_count"`
 }
 
 func (s *PgStats) fetchTables(view string) ([]PgStatTablesRow, error) {

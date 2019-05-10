@@ -16,27 +16,27 @@ type PgStatIoUserTablesView []PgStatIoTablesRow
 // PgStatIoTablesRow represents schema of pg_statio_*_tables views
 type PgStatIoTablesRow struct {
 	// OID of a table
-	RelId int64
+	RelId int64 `json:"relid"`
 	// Name of the schema that this table is in
-	SchemaName string
+	SchemaName string `json:"schemaname"`
 	// Name of this table
-	RelName string
+	RelName string `json:"relname"`
 	// Number of disk blocks read from this table
-	HeapBlksRead sql.NullInt64
+	HeapBlksRead sql.NullInt64 `json:"heap_blks_read"`
 	// Number of buffer hits in this table
-	HeapBlksHit sql.NullInt64
+	HeapBlksHit sql.NullInt64 `json:"heap_blks_hit"`
 	// Number of disk blocks read from all indexes on this table
-	IdxBlksRead sql.NullInt64
+	IdxBlksRead sql.NullInt64 `json:"idx_blks_read"`
 	// Number of buffer hits in all indexes on this table
-	IdxBlksHit sql.NullInt64
+	IdxBlksHit sql.NullInt64 `json:"idx_blks_hit"`
 	// Number of disk blocks read from this table's TOAST table (if any)
-	ToastBlksRead sql.NullInt64
+	ToastBlksRead sql.NullInt64 `json:"toast_blks_read"`
 	// Number of buffer hits in this table's TOAST table (if any)
-	ToastBlksHit sql.NullInt64
+	ToastBlksHit sql.NullInt64 `json:"toast_blks_hit"`
 	// Number of disk blocks read from this table's TOAST table indexes (if any)
-	TidxBlksRead sql.NullInt64
+	TidxBlksRead sql.NullInt64 `json:"tidx_blks_read"`
 	// Number of buffer hits in this table's TOAST table indexes (if any)
-	TidxBlksHit sql.NullInt64
+	TidxBlksHit sql.NullInt64 `json:"tidx_blks_hit"`
 }
 
 func (s *PgStats) fetchIoTables(view string) ([]PgStatIoTablesRow, error) {

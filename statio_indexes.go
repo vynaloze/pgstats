@@ -14,19 +14,19 @@ type PgStatIoUserIndexesView []PgStatIoIndexesRow
 // PgStatIoIndexesRow represents schema of pg_statio_*_indexes views
 type PgStatIoIndexesRow struct {
 	// OID of the table for this index
-	RelId int64
+	RelId int64 `json:"relid"`
 	// OID of this index
-	IndexRelId int64
+	IndexRelId int64 `json:"indexrelid"`
 	// Name of the schema this index is in
-	SchemaName string
+	SchemaName string `json:"schemaname"`
 	// Name of the table for this index
-	RelName string
+	RelName string `json:"relname"`
 	// Name of this index
-	IndexRelName string
+	IndexRelName string `json:"indexrelname"`
 	// Number of disk blocks read from this index
-	IdxBlksRead sql.NullInt64
+	IdxBlksRead sql.NullInt64 `json:"idx_blks_read"`
 	// Number of buffer hits in this index
-	IdxBlksHit sql.NullInt64
+	IdxBlksHit sql.NullInt64 `json:"idx_blks_hit"`
 }
 
 func (s *PgStats) fetchIoIndexes(view string) ([]PgStatIoIndexesRow, error) {

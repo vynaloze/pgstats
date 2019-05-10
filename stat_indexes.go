@@ -14,21 +14,21 @@ type PgStatUserIndexesView []PgStatIndexesRow
 // PgStatIndexesRow represents schema of pg_stat_*_indexes views
 type PgStatIndexesRow struct {
 	// OID of the table for this index
-	RelId int64
+	RelId int64 `json:"relid"`
 	// OID of this index
-	IndexRelId int64
+	IndexRelId int64 `json:"indexrelid"`
 	// Name of the schema this index is in
-	SchemaName string
+	SchemaName string `json:"schemaname"`
 	// Name of the table for this index
-	RelName string
+	RelName string `json:"relname"`
 	// Name of this index
-	IndexRelName string
+	IndexRelName string `json:"indexrelname"`
 	// Number of index scans initiated on this index
-	IdxScan sql.NullInt64
+	IdxScan sql.NullInt64 `json:"idx_scan"`
 	// Number of index entries returned by scans on this index
-	IdxTupRead sql.NullInt64
+	IdxTupRead sql.NullInt64 `json:"idx_tup_read"`
 	// Number of live table rows fetched by simple index scans using this index
-	IdxTupFetch sql.NullInt64
+	IdxTupFetch sql.NullInt64 `json:"idx_tup_fetch"`
 }
 
 func (s *PgStats) fetchIndexes(view string) ([]PgStatIndexesRow, error) {
