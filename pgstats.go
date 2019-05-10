@@ -14,6 +14,14 @@ func Connect(dbname string, user string, password string, options ...func(*conne
 	return s, err
 }
 
+// PgStatArchiver returns a single struct, containing global data for the cluster,
+// showing statistics about the WAL archiver process's activity.
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ARCHIVER-VIEW
+func (s *PgStats) PgStatArchiver() (PgStatArchiverView, error) {
+	return s.fetchArchiver()
+}
+
 // PgStatBgWriter returns a single struct, containing global data for the cluster,
 // showing statistics about the background writer process's activity.
 // For more details, see:
