@@ -14,6 +14,14 @@ func Connect(dbname string, user string, password string, options ...func(*conne
 	return s, err
 }
 
+// PgStatActivity returns a slice, containing information related to the current activity of a process,
+// such as state and current query, for each server process.
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ACTIVITY-VIEW
+func (s *PgStats) PgStatActivity() (PgStatActivityView, error) {
+	return s.fetchActivity()
+}
+
 // PgStatArchiver returns a single struct, containing global data for the cluster,
 // showing statistics about the WAL archiver process's activity.
 // For more details, see:
