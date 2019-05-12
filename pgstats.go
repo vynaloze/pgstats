@@ -22,6 +22,14 @@ func (s *PgStats) PgStatActivity() (PgStatActivityView, error) {
 	return s.fetchActivity()
 }
 
+// PgStatReplication returns a slice, containing statistics about each WAL sender process,
+// showing information about replication to that sender's connected standby server.
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-REPLICATION-VIEW
+func (s *PgStats) PgStatReplication() (PgStatReplicationView, error) {
+	return s.fetchReplication()
+}
+
 // PgStatArchiver returns a single struct, containing global data for the cluster,
 // showing statistics about the WAL archiver process's activity.
 // For more details, see:
