@@ -30,6 +30,14 @@ func (s *PgStats) PgStatReplication() (PgStatReplicationView, error) {
 	return s.fetchReplication()
 }
 
+// PgStatWalReceiver returns a single struct,
+// containing statistics about the WAL receiver from that receiver's connected server.
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-WAL-RECEIVER-VIEW
+func (s *PgStats) PgStatWalReceiver() (PgStatWalReceiverView, error) {
+	return s.fetchWalReceiver()
+}
+
 // PgStatArchiver returns a single struct, containing global data for the cluster,
 // showing statistics about the WAL archiver process's activity.
 // For more details, see:
