@@ -1,3 +1,7 @@
+// Package pgstats provides convenient access to all pg_stat_* statistics,
+// allowing to monitor PostgreSQL instances inside go applications.
+//
+// For details, see: https://github.com/vynaloze/pgstats/blob/master/README.md
 package pgstats
 
 type PgStats struct {
@@ -12,6 +16,10 @@ func Connect(dbname string, user string, password string, options ...func(*conne
 	}
 	err = s.openConnection()
 	return s, err
+}
+
+func (s *PgStats) Close() error {
+	return s.conn.db.Close()
 }
 
 // PgStatActivity returns a slice, containing information related to the current activity of a process,
