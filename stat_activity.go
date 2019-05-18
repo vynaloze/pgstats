@@ -23,7 +23,7 @@ type PgStatActivityRow struct {
 	// IP address of the client connected to this backend.
 	// If this field is null, it indicates either that the client is connected via a Unix socket on the server machine
 	// or that this is an internal process such as autovacuum.
-	ClientAddr sql.NullString `json:"client_addr"` // fixme - inet type
+	ClientAddr sql.NullString `json:"client_addr"`
 	// Host name of the connected client, as reported by a reverse DNS lookup of client_addr.
 	// This field will only be non-null for IP connections, and only when log_hostname is enabled.
 	ClientHostname sql.NullString `json:"client_hostname"`
@@ -55,9 +55,9 @@ type PgStatActivityRow struct {
 	// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ACTIVITY-VIEW
 	State sql.NullString `json:"state"`
 	// Top-level transaction identifier of this backend, if any.
-	BackendXid sql.NullInt64 `json:"backend_xid"` // fixme - type xid
+	BackendXid sql.NullInt64 `json:"backend_xid"`
 	// The current backend's xmin horizon.
-	BackendXmin sql.NullInt64 `json:"backend_xmin"` // fixme - type xid
+	BackendXmin sql.NullInt64 `json:"backend_xmin"`
 	// Text of this backend's most recent query.
 	// If state is active this field shows the currently executing query.
 	// In all other states, it shows the last query that was executed.

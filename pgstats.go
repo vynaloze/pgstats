@@ -22,6 +22,8 @@ func (s *PgStats) PgStatActivity() (PgStatActivityView, error) {
 	return s.fetchActivity()
 }
 
+// TODO - replication (pg_stat_replication, pg_stat_wal_receiver, pg_stat_subscription)
+
 // PgStatArchiver returns a single struct, containing global data for the cluster,
 // showing statistics about the WAL archiver process's activity.
 // For more details, see:
