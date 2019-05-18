@@ -24,6 +24,14 @@ func (s *PgStats) PgStatActivity() (PgStatActivityView, error) {
 
 // TODO - replication (pg_stat_replication, pg_stat_wal_receiver, pg_stat_subscription)
 
+// PgStatSsl returns a slice, containing statistics about SSL usage
+// on the connection for each backend or WAL sender process.
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-SSL
+func (s *PgStats) PgStatSsl() (PgStatSslView, error) {
+	return s.fetchSsl()
+}
+
 // PgStatArchiver returns a single struct, containing global data for the cluster,
 // showing statistics about the WAL archiver process's activity.
 // For more details, see:
