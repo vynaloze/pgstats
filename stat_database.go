@@ -11,9 +11,9 @@ type PgStatDatabaseView []PgStatDatabaseRow
 // PgStatDatabaseRow represents schema of pg_stat_database view
 type PgStatDatabaseRow struct {
 	// OID of a database
-	DatId int64 `json:"datid"`
+	Datid int64 `json:"datid"`
 	// Name of this database
-	DatName string `json:"datname"`
+	Datname string `json:"datname"`
 	// Number of backends currently connected to this database.
 	// This is the only column in this view that returns a value reflecting current state;
 	// all other columns return the accumulated values since the last reset.
@@ -76,7 +76,7 @@ func (s *PgStats) fetchDatabases() ([]PgStatDatabaseRow, error) {
 	data := make([]PgStatDatabaseRow, 0)
 	for rows.Next() {
 		row := new(PgStatDatabaseRow)
-		err := rows.Scan(&row.DatId, &row.DatName, &row.NumBackends, &row.XactCommit, &row.XactRollback,
+		err := rows.Scan(&row.Datid, &row.Datname, &row.NumBackends, &row.XactCommit, &row.XactRollback,
 			&row.BlksRead, &row.BlksHit, &row.TupReturned, &row.TupFetched, &row.TupInserted,
 			&row.TupUpdated, &row.TupDeleted, &row.Conflicts, &row.TempFiles, &row.TempBytes,
 			&row.Deadlocks, &row.BlkReadTime, &row.BlkWriteTime, &row.StatsReset)

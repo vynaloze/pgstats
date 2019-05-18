@@ -16,11 +16,11 @@ type PgStatIoUserTablesView []PgStatIoTablesRow
 // PgStatIoTablesRow represents schema of pg_statio_*_tables views
 type PgStatIoTablesRow struct {
 	// OID of a table
-	RelId int64 `json:"relid"`
+	Relid int64 `json:"relid"`
 	// Name of the schema that this table is in
-	SchemaName string `json:"schemaname"`
+	Schemaname string `json:"schemaname"`
 	// Name of this table
-	RelName string `json:"relname"`
+	Relname string `json:"relname"`
 	// Number of disk blocks read from this table
 	HeapBlksRead sql.NullInt64 `json:"heap_blks_read"`
 	// Number of buffer hits in this table
@@ -56,7 +56,7 @@ func (s *PgStats) fetchIoTables(view string) ([]PgStatIoTablesRow, error) {
 	data := make([]PgStatIoTablesRow, 0)
 	for rows.Next() {
 		row := new(PgStatIoTablesRow)
-		err := rows.Scan(&row.RelId, &row.SchemaName, &row.RelName,
+		err := rows.Scan(&row.Relid, &row.Schemaname, &row.Relname,
 			&row.HeapBlksRead, &row.HeapBlksHit,
 			&row.IdxBlksRead, &row.IdxBlksHit,
 			&row.ToastBlksRead, &row.ToastBlksHit,

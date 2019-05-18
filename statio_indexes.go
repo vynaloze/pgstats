@@ -14,15 +14,15 @@ type PgStatIoUserIndexesView []PgStatIoIndexesRow
 // PgStatIoIndexesRow represents schema of pg_statio_*_indexes views
 type PgStatIoIndexesRow struct {
 	// OID of the table for this index
-	RelId int64 `json:"relid"`
+	Relid int64 `json:"relid"`
 	// OID of this index
-	IndexRelId int64 `json:"indexrelid"`
+	Indexrelid int64 `json:"indexrelid"`
 	// Name of the schema this index is in
-	SchemaName string `json:"schemaname"`
+	Schemaname string `json:"schemaname"`
 	// Name of the table for this index
-	RelName string `json:"relname"`
+	Relname string `json:"relname"`
 	// Name of this index
-	IndexRelName string `json:"indexrelname"`
+	Indexrelname string `json:"indexrelname"`
 	// Number of disk blocks read from this index
 	IdxBlksRead sql.NullInt64 `json:"idx_blks_read"`
 	// Number of buffer hits in this index
@@ -43,7 +43,7 @@ func (s *PgStats) fetchIoIndexes(view string) ([]PgStatIoIndexesRow, error) {
 	data := make([]PgStatIoIndexesRow, 0)
 	for rows.Next() {
 		row := new(PgStatIoIndexesRow)
-		err := rows.Scan(&row.RelId, &row.IndexRelId, &row.SchemaName, &row.RelName, &row.IndexRelName,
+		err := rows.Scan(&row.Relid, &row.Indexrelid, &row.Schemaname, &row.Relname, &row.Indexrelname,
 			&row.IdxBlksRead, &row.IdxBlksHit)
 		if err != nil {
 			return nil, err

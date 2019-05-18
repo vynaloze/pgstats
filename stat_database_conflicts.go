@@ -10,9 +10,9 @@ type PgStatDatabaseConflictsView []PgStatDatabaseConflictsRow
 // PgStatDatabaseConflictsRow represents schema of pg_stat_database_conflicts view
 type PgStatDatabaseConflictsRow struct {
 	// OID of a database
-	DatId int64 `json:"datid"`
+	Datid int64 `json:"datid"`
 	// Name of this database
-	DatName string `json:"datname"`
+	Datname string `json:"datname"`
 	// Number of queries in this database that have been canceled due to dropped tablespaces
 	ConflTablespace sql.NullInt64 `json:"confl_tablespace"`
 	// Number of queries in this database that have been canceled due to lock timeouts
@@ -40,7 +40,7 @@ func (s *PgStats) fetchDatabaseConflicts() ([]PgStatDatabaseConflictsRow, error)
 	data := make([]PgStatDatabaseConflictsRow, 0)
 	for rows.Next() {
 		row := new(PgStatDatabaseConflictsRow)
-		err := rows.Scan(&row.DatId, &row.DatName,
+		err := rows.Scan(&row.Datid, &row.Datname,
 			&row.ConflTablespace, &row.ConflLock, &row.ConflSnapshot, &row.ConflBufferpin, &row.ConflDeadlock)
 		if err != nil {
 			return nil, err

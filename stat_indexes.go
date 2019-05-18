@@ -14,15 +14,15 @@ type PgStatUserIndexesView []PgStatIndexesRow
 // PgStatIndexesRow represents schema of pg_stat_*_indexes views
 type PgStatIndexesRow struct {
 	// OID of the table for this index
-	RelId int64 `json:"relid"`
+	Relid int64 `json:"relid"`
 	// OID of this index
-	IndexRelId int64 `json:"indexrelid"`
+	Indexrelid int64 `json:"indexrelid"`
 	// Name of the schema this index is in
-	SchemaName string `json:"schemaname"`
+	Schemaname string `json:"schemaname"`
 	// Name of the table for this index
-	RelName string `json:"relname"`
+	Relname string `json:"relname"`
 	// Name of this index
-	IndexRelName string `json:"indexrelname"`
+	Indexrelname string `json:"indexrelname"`
 	// Number of index scans initiated on this index
 	IdxScan sql.NullInt64 `json:"idx_scan"`
 	// Number of index entries returned by scans on this index
@@ -45,7 +45,7 @@ func (s *PgStats) fetchIndexes(view string) ([]PgStatIndexesRow, error) {
 	data := make([]PgStatIndexesRow, 0)
 	for rows.Next() {
 		row := new(PgStatIndexesRow)
-		err := rows.Scan(&row.RelId, &row.IndexRelId, &row.SchemaName, &row.RelName, &row.IndexRelName,
+		err := rows.Scan(&row.Relid, &row.Indexrelid, &row.Schemaname, &row.Relname, &row.Indexrelname,
 			&row.IdxScan, &row.IdxTupRead, &row.IdxTupFetch)
 		if err != nil {
 			return nil, err

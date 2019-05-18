@@ -17,11 +17,11 @@ type PgStatUserTablesView []PgStatTablesRow
 // PgStatTablesRow represents schema of pg_stat_*_tables views
 type PgStatTablesRow struct {
 	// OID of a table
-	RelId int64 `json:"relid"`
+	Relid int64 `json:"relid"`
 	// Name of the schema that this table is in
-	SchemaName string `json:"schemaname"`
+	Schemaname string `json:"schemaname"`
 	// Name of this table
-	RelName string `json:"relname"`
+	Relname string `json:"relname"`
 	// Number of sequential scans initiated on this table
 	SeqScan sql.NullInt64 `json:"seq_scan"`
 	// Number of live rows fetched by sequential scans
@@ -79,7 +79,7 @@ func (s *PgStats) fetchTables(view string) ([]PgStatTablesRow, error) {
 	data := make([]PgStatTablesRow, 0)
 	for rows.Next() {
 		row := new(PgStatTablesRow)
-		err := rows.Scan(&row.RelId, &row.SchemaName, &row.RelName, &row.SeqScan, &row.SeqTupRead,
+		err := rows.Scan(&row.Relid, &row.Schemaname, &row.Relname, &row.SeqScan, &row.SeqTupRead,
 			&row.IdxScan, &row.IdxTupFetch, &row.NTupIns, &row.NTupUpd, &row.NTupDel,
 			&row.NTupHotUpd, &row.NLiveTup, &row.NDeadTup, &row.NModSinceAnalyze, &row.LastVacuum,
 			&row.LastAutovacuum, &row.LastAnalyze, &row.LastAutoanalyze, &row.VacuumCount, &row.AutovacuumCount,
