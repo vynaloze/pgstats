@@ -32,6 +32,15 @@ func (s *PgStats) PgStatSsl() (PgStatSslView, error) {
 	return s.fetchSsl()
 }
 
+// PgStatProgressVacuum returns a slice, containing information related to currently running VACUUM processes,
+// for each backend (including autovacuum worker processes) that is currently vacuuming.
+// Progress reporting is not currently supported for VACUUM FULL and backends running VACUUM FULL will not be listed in this view.
+// For more details, see:
+// https://www.postgresql.org/docs/current/progress-reporting.html#VACUUM-PROGRESS-REPORTING
+func (s *PgStats) PgStatProgressVacuum() (PgStatProgressVacuumView, error) {
+	return s.fetchProgressVacuum()
+}
+
 // PgStatArchiver returns a single struct, containing global data for the cluster,
 // showing statistics about the WAL archiver process's activity.
 // For more details, see:
