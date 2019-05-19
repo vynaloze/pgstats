@@ -4,10 +4,13 @@
 // For details, see: https://github.com/vynaloze/pgstats/blob/master/README.md
 package pgstats
 
+// PgStats holds a single connection to the database
+// and provides a convenient access to all postgres monitoring statistics.
 type PgStats struct {
 	conn *connection
 }
 
+// Connect opens a connection using provided parameters and returns a pointer to newly created PgStats struct.
 func Connect(dbname string, user string, password string, options ...func(*connection) error) (*PgStats, error) {
 	s := &PgStats{}
 	err := s.prepareConnection(dbname, user, password, options...)
@@ -18,6 +21,7 @@ func Connect(dbname string, user string, password string, options ...func(*conne
 	return s, err
 }
 
+// Close closes the connection to database.
 func (s *PgStats) Close() error {
 	return s.conn.db.Close()
 }
@@ -234,7 +238,7 @@ func (s *PgStats) PgStatUserFunctions() (PgStatUserFunctionsView, error) {
 	return s.fetchFunctions("pg_stat_user_functions")
 }
 
-// PgStatUserFunctions returns a slice containing statistics about executions
+// PgStatXactUserFunctions returns a slice containing statistics about executions
 // of each tracked function in the current database,
 // but counts only calls during the current transaction
 // (which are not yet included in pg_stat_user_functions).

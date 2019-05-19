@@ -2,6 +2,7 @@ package pgstats
 
 import (
 	"database/sql"
+	// import to register driver
 	_ "github.com/lib/pq"
 	"strings"
 )

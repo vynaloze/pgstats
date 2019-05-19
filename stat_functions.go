@@ -5,7 +5,7 @@ import "database/sql"
 // PgStatUserFunctionsView represents content of pg_stat_user_functions view
 type PgStatUserFunctionsView []PgStatFunctionsRow
 
-// PgStatUserFunctionsView represents content of pg_stat_xact_user_functions view
+// PgStatXactUserFunctionsView represents content of pg_stat_xact_user_functions view
 type PgStatXactUserFunctionsView []PgStatFunctionsRow
 
 // PgStatFunctionsRow represents schema of pg_stat*_user_functions views
