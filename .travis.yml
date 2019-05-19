@@ -19,6 +19,8 @@ env:
 before_install:
   - sudo /etc/init.d/postgresql stop
   - docker run -d --name postgres -e "POSTGRES_USER=user" -e "POSTGRES_PASSWORD=pass" -e "POSTGRES_DB=testdb" -p 5432:5432 postgres:$PG_VERSION
+  - go get golang.org/x/tools/cmd/cover
+  - go get github.com/mattn/goveralls
 
 before_script:
   - while ! pg_isready -h localhost -p 5432 -q;do echo "postgres unavailable - sleep 1";sleep 1;done;echo "postgres running";
@@ -28,4 +30,5 @@ before_script:
   - PGPASSWORD=pass pgbench -T 5 -U user -h localhost -p 5432 testdb
 
 script:
-  - go test -v -tags integration -user=user -password=pass -dbname=testdb
+  - go test -v -tags integration -covermode=count -coverprofile=coverage.out -user=user -password=pass -dbname=testdb
+  - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
