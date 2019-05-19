@@ -30,7 +30,16 @@ func TestPgSsl(t *testing.T) {
 	validate(t, len(a), err)
 }
 
-// todo test VACUUM
+func TestPgStatProgressVacuum(t *testing.T) {
+	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = s.PgStatProgressVacuum()
+	if err != nil {
+		t.Error(err)
+	}
+}
 
 func TestPgArchiver(t *testing.T) {
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))

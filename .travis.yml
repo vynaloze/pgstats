@@ -2,3 +2,30 @@ language: go
 
 go:
   - 1.x
+
+git:
+  depth: 1
+
+notifications:
+  email: false
+
+services:
+  - docker
+
+env:
+  - PG_VERSION=10
+  #- PG_VERSION=9.6
+
+before_install:
+  - sudo /etc/init.d/postgresql stop
+  - docker run -d --name postgres -e "POSTGRES_USER=user" -e "POSTGRES_PASSWORD=pass" -e "POSTGRES_DB=testdb" -p 5432:5432 postgres:$PG_VERSION
+
+before_script:
+  - while ! pg_isready -h localhost -p 5432 -q;do echo "postgres unavailable - sleep 1";sleep 1;done;echo "postgres running";
+  - PGPASSWORD=pass psql -c 'create sequence text_seq;' -U user -h localhost -p 5432 testdb
+  - PGPASSWORD=pass psql -c "create function i() returns integer as \$\$ begin return 1; end; \$\$ language plpgsql; set track_functions='pl';select i();" -U user -h localhost -p 5432 testdb
+  - PGPASSWORD=pass pgbench -i -q -U user -h localhost -p 5432 testdb
+  - PGPASSWORD=pass pgbench -T 5 -U user -h localhost -p 5432 testdb
+
+script:
+  - go test -v -tags integration -user=user -password=pass -dbname=testdb

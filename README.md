@@ -2,6 +2,7 @@
 [![Documentation](https://godoc.org/github.com/vynaloze/pgstats?status.svg)](https://godoc.org/github.com/vynaloze/pgstats)
 [![Go Report Card](https://goreportcard.com/badge/github.com/vynaloze/pgstats)](https://goreportcard.com/report/github.com/vynaloze/pgstats)
 [![Coverage Status](https://coveralls.io/repos/github/vynaloze/pgstats/badge.svg?branch=master)](https://coveralls.io/github/vynaloze/pgstats?branch=master)
+[![Build Status](https://travis-ci.com/vynaloze/pgstats.svg?branch=master)](https://travis-ci.com/vynaloze/pgstats)
 
 **pgstats** provides convenient access to **pg_stat_&ast;** statistics, allowing to monitor **PostgreSQL** instances inside **go** applications.
 
@@ -22,7 +23,7 @@ Check out the [quick API overview](doc/api.md) or [full documentation on godoc.o
 
 1. **Define your connection.** You can do it anywhere, at any time and as many times as you want.
 However, you cannot override the settings once you define the connection. If you want to play with many connections, 
-see the [next section](#want-to-have-multiple-connections?)
+see the [next section](#want-to-have-multiple-connections)
 
     ```go
     err := pgstats.DefineConnection("foo", "username", "password")
