@@ -15,7 +15,7 @@ Use at your own risk.
 `go get github.com/vynaloze/pgstats`
 
 ## API reference
-Check out the [quick API overview](doc/api.md) or [full documentation on godoc.org](https://godoc.org/github.com/vynaloze/pgstats)
+Check out the [quick API overview](https://github.com/vynaloze/pgstats/wiki/API-methods) or [full documentation on godoc.org](https://godoc.org/github.com/vynaloze/pgstats)
 
 ## Usage
 ### Want it simple?
@@ -83,22 +83,24 @@ err := pgstats.DefineConnection("foo", "username", "password", pgstats.Host("10.
 ```go
 conn, err := pgstats.Connect("foo", "username", "password", pgstats.SslMode("disable"))
 ```
-[Full reference](doc/options.md)
+[Full reference](https://github.com/vynaloze/pgstats/wiki/Connection-parameters)
 ## Supported PostgreSQL versions
 - 10
+
+[Full pg_stat view / version table](https://github.com/vynaloze/pgstats/wiki/Supported-stats-vs-PG-version)
 
 ## Roadmap
 Done? | Version | Content | ETA
 --- | --- | --- | ---
 Y | `v0.1.0` | most stats available and tested in PG 10 | ~May '19
 Y | | setup CI for integration tests | ~May '19
-N | `v0.2.0` | add replication-related stats | ~June '19
+N | `v0.2.0` | pg_stat_statements | ~June '19
 N | `v0.3.0` | support PG 11 | ~June '19
 N | `v0.4.0` | support PG 9.6 | ~June '19
 N | `v0.5.0` | support PG 9.5 | ~June '19
 N | `v0.6.0` | support PG 9.4 | ~June '19
 N | `v1.0.0` | global wrapper for the ease of use | ~July '19
-N | `v1.1.0` | pg_stat_statements | ~July '19
+N | `v1.1.0` | add missing integration tests | ~July '19
 
 ## License
 The library is licensed under the [MIT License](LICENSE).
