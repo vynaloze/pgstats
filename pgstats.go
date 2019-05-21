@@ -268,3 +268,11 @@ func (s *PgStats) PgStatUserFunctions() (PgStatUserFunctionsView, error) {
 func (s *PgStats) PgStatXactUserFunctions() (PgStatXactUserFunctionsView, error) {
 	return s.fetchFunctions("pg_stat_xact_user_functions")
 }
+
+// PgStatStatements returns a slice containing statistics about executions
+// of all SQL statements in the current database.
+// For more details, see:
+// https://www.postgresql.org/docs/current/pgstatstatements.html
+func (s *PgStats) PgStatStatements() (PgStatStatementsView, error) {
+	return s.fetchStatements()
+}

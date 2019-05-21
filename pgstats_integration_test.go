@@ -209,6 +209,15 @@ func TestPgStatFunctions(t *testing.T) {
 	}
 }
 
+func TestPgStatStatements(t *testing.T) {
+	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
+	if err != nil {
+		t.Error(err)
+	}
+	ss, err := s.PgStatStatements()
+	validate(t, len(ss), err)
+}
+
 func validate(t *testing.T, len int, err error) {
 	if err != nil {
 		t.Error(err)

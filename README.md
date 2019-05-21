@@ -94,7 +94,7 @@ Done? | Version | Content | ETA
 --- | --- | --- | ---
 Y | `v0.1.0` | most stats available and tested in PG 10 | ~May '19
 Y | | setup CI for integration tests | ~May '19
-N | `v0.2.0` | pg_stat_statements | ~June '19
+Y | `v0.2.0` | pg_stat_statements | ~June '19
 N | `v0.3.0` | support PG 11 | ~June '19
 N | `v0.4.0` | support PG 9.6 | ~June '19
 N | `v0.5.0` | support PG 9.5 | ~June '19

@@ -18,12 +18,13 @@ env:
 
 before_install:
   - sudo /etc/init.d/postgresql stop
-  - docker run -d --name postgres -e "POSTGRES_USER=user" -e "POSTGRES_PASSWORD=pass" -e "POSTGRES_DB=testdb" -p 5432:5432 postgres:$PG_VERSION
+  - docker run -d --name postgres -e "POSTGRES_USER=user" -e "POSTGRES_PASSWORD=pass" -e "POSTGRES_DB=testdb" -p 5432:5432 postgres:$PG_VERSION -c "shared_preload_libraries=pg_stat_statements"
   - go get golang.org/x/tools/cmd/cover
   - go get github.com/mattn/goveralls
 
 before_script:
   - while ! pg_isready -h localhost -p 5432 -q;do echo "postgres unavailable - sleep 1";sleep 1;done;echo "postgres running";
+  - PGPASSWORD=pass psql -c 'create extension pg_stat_statements;' -U user -h localhost -p 5432 testdb
   - PGPASSWORD=pass psql -c 'create sequence text_seq;' -U user -h localhost -p 5432 testdb
   - PGPASSWORD=pass psql -c "create function i() returns integer as \$\$ begin return 1; end; \$\$ language plpgsql; set track_functions='pl';select i();" -U user -h localhost -p 5432 testdb
   - PGPASSWORD=pass pgbench -i -q -U user -h localhost -p 5432 testdb
