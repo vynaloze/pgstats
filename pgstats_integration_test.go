@@ -21,6 +21,41 @@ func TestPgActivity(t *testing.T) {
 	validate(t, len(a), err)
 }
 
+func TestPgReplication(t *testing.T) {
+	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = s.PgStatReplication()
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestPgWalReceiver(t *testing.T) {
+	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = s.PgStatWalReceiver()
+	if err != nil {
+		if err.Error() != "sql: no rows in result set" { //fixme hack until there is test env for replication stats
+			t.Error(err)
+		}
+	}
+}
+
+func TestPgSubscription(t *testing.T) {
+	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = s.PgStatSubscription()
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestPgArchiver(t *testing.T) {
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
