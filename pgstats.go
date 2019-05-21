@@ -34,7 +34,30 @@ func (s *PgStats) PgStatActivity() (PgStatActivityView, error) {
 	return s.fetchActivity()
 }
 
-// TODO - replication (pg_stat_replication, pg_stat_wal_receiver, pg_stat_subscription)
+// PgStatReplication returns a slice, containing statistics about each WAL sender process,
+// showing information about replication to that sender's connected standby server.
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-REPLICATION-VIEW
+func (s *PgStats) PgStatReplication() (PgStatReplicationView, error) {
+	return s.fetchReplication()
+}
+
+// PgStatWalReceiver returns a single struct,
+// containing statistics about the WAL receiver from that receiver's connected server.
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-WAL-RECEIVER-VIEW
+func (s *PgStats) PgStatWalReceiver() (PgStatWalReceiverView, error) {
+	return s.fetchWalReceiver()
+}
+
+// PgStatSubscription returns a slice, containing statistics about
+// subscription for main worker (with null PID if the worker is not running),
+// and workers handling the initial data copy of the subscribed tables.
+// For more details, see:
+// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-SUBSCRIPTION
+func (s *PgStats) PgStatSubscription() (PgStatSubscriptionView, error) {
+	return s.fetchSubscription()
+}
 
 // PgStatSsl returns a slice, containing statistics about SSL usage
 // on the connection for each backend or WAL sender process.
