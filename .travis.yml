@@ -13,8 +13,8 @@ services:
   - docker
 
 env:
+  - PG_VERSION=11
   - PG_VERSION=10
-  #- PG_VERSION=9.6
 
 before_install:
   - sudo /etc/init.d/postgresql stop

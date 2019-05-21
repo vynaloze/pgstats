@@ -3,6 +3,7 @@ package pgstats
 import (
 	"database/sql"
 	"github.com/lib/pq"
+	"github.com/pkg/errors"
 )
 
 // PgStatWalReceiverView represents content of pg_stat_wal_receiver view
@@ -31,19 +32,46 @@ type PgStatWalReceiverView struct {
 	LatestEndTime pq.NullTime `json:"latest_end_time"`
 	// Replication slot name used by this WAL receiver
 	SlotName sql.NullString `json:"slot_name"`
+	// Host of the PostgreSQL instance this WAL receiver is connected to.
+	// This can be a host name, an IP address, or a directory path if the connection is via Unix socket.
+	// (The path case can be distinguished because it will always be an absolute path, beginning with /.)
+	// Supported since PostgreSQL 11
+	SenderHost sql.NullString `json:"sender_host"`
+	// Port number of the PostgreSQL instance this WAL receiver is connected to.
+	// Supported since PostgreSQL 11
+	SenderPort sql.NullInt64 `json:"sender_port"`
 	// Connection string used by this WAL receiver, with security-sensitive fields obfuscated.
 	Conninfo sql.NullString `json:"conninfo"`
 }
 
-// ----PG11 stuff-----
-// Host of the PostgreSQL instance this WAL receiver is connected to.
-// This can be a host name, an IP address, or a directory path if the connection is via Unix socket.
-// (The path case can be distinguished because it will always be an absolute path, beginning with /.)
-//SenderHost sql.NullString `json:"sender_host"`
-// Port number of the PostgreSQL instance this WAL receiver is connected to.
-//SenderPort sql.NullInt64 `json:"sender_port"`
-
 func (s *PgStats) fetchWalReceiver() (PgStatWalReceiverView, error) {
+	version, err := s.getPgVersion()
+	if err != nil {
+		return PgStatWalReceiverView{}, err
+	}
+	switch version {
+	case "11":
+		return s.fetchWalReceiver11()
+	case "10":
+		return s.fetchWalReceiver10()
+	}
+	return PgStatWalReceiverView{}, errors.New("Unsupported PG version " + version)
+}
+
+func (s *PgStats) fetchWalReceiver11() (PgStatWalReceiverView, error) {
+	db := s.conn.db
+	query := "select pid,status,receive_start_lsn,receive_start_tli,received_lsn," +
+		"received_tli,last_msg_send_time,last_msg_receipt_time,latest_end_lsn,latest_end_time," +
+		"slot_name,sender_host,sender_port,conninfo from pg_stat_wal_receiver"
+	row := db.QueryRow(query)
+	res := new(PgStatWalReceiverView)
+	err := row.Scan(&res.Pid, &res.Status, &res.ReceiveStartLsn, &res.ReceiveStartTli, &res.ReceivedLsn,
+		&res.ReceivedTli, &res.LastMsgSendTime, &res.LastMsgReceiptTime, &res.LatestEndLsn, &res.LatestEndTime,
+		&res.SlotName, &res.Conninfo)
+	return *res, err
+}
+
+func (s *PgStats) fetchWalReceiver10() (PgStatWalReceiverView, error) {
 	db := s.conn.db
 	query := "select pid,status,receive_start_lsn,receive_start_tli,received_lsn," +
 		"received_tli,last_msg_send_time,last_msg_receipt_time,latest_end_lsn,latest_end_time," +
