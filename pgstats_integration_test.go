@@ -14,6 +14,7 @@ var user = flag.String("user", "", "Test username")
 var password = flag.String("password", "", "Test password")
 
 func TestPgActivity(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -23,6 +24,7 @@ func TestPgActivity(t *testing.T) {
 }
 
 func TestPgReplication(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -34,6 +36,7 @@ func TestPgReplication(t *testing.T) {
 }
 
 func TestPgWalReceiver(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -47,6 +50,7 @@ func TestPgWalReceiver(t *testing.T) {
 }
 
 func TestPgSubscription(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -58,6 +62,7 @@ func TestPgSubscription(t *testing.T) {
 }
 
 func TestPgSsl(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -75,6 +80,7 @@ func TestPgSsl(t *testing.T) {
 }
 
 func TestPgStatProgressVacuum(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -86,6 +92,7 @@ func TestPgStatProgressVacuum(t *testing.T) {
 }
 
 func TestPgArchiver(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -97,6 +104,7 @@ func TestPgArchiver(t *testing.T) {
 }
 
 func TestPgBgWriter(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -108,6 +116,7 @@ func TestPgBgWriter(t *testing.T) {
 }
 
 func TestPgStatDatabase(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -117,6 +126,7 @@ func TestPgStatDatabase(t *testing.T) {
 }
 
 func TestPgStatDatabaseConflicts(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -126,6 +136,7 @@ func TestPgStatDatabaseConflicts(t *testing.T) {
 }
 
 func TestPgStatTables(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -139,6 +150,7 @@ func TestPgStatTables(t *testing.T) {
 }
 
 func TestPgXactStatTables(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -152,6 +164,7 @@ func TestPgXactStatTables(t *testing.T) {
 }
 
 func TestPgStatIndexes(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -165,6 +178,7 @@ func TestPgStatIndexes(t *testing.T) {
 }
 
 func TestPgStatIoTables(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -178,6 +192,7 @@ func TestPgStatIoTables(t *testing.T) {
 }
 
 func TestPgStatIoIndexes(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -191,6 +206,7 @@ func TestPgStatIoIndexes(t *testing.T) {
 }
 
 func TestPgStatIoSequences(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -206,6 +222,7 @@ func TestPgStatIoSequences(t *testing.T) {
 }
 
 func TestPgStatFunctions(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)
@@ -219,6 +236,7 @@ func TestPgStatFunctions(t *testing.T) {
 }
 
 func TestPgStatStatements(t *testing.T) {
+	t.Parallel()
 	s, err := pgstats.Connect(*dbname, *user, *password, pgstats.SslMode("disable"))
 	if err != nil {
 		t.Error(err)

@@ -6,11 +6,6 @@
 
 **pgstats** provides convenient access to **pg_stat_&ast;** statistics, allowing to monitor **PostgreSQL** instances inside **go** applications.
 
-## Attention - Work in Progress!
-The library is in _early access_ state, under active development. 
-Expect breaking changes, new functionalities and improvements in the near future. 
-Use at your own risk.
-
 ## Install
 `go get github.com/vynaloze/pgstats`
 
@@ -19,8 +14,6 @@ Check out the [quick API overview](https://github.com/vynaloze/pgstats/wiki/API-
 
 ## Usage
 ### Want it simple?
-**It will be supported since v1.0.0!**
-
 1. **Define your connection.** You can do it anywhere, at any time and as many times as you want.
 However, you cannot override the settings once you define the connection. If you want to play with many connections, 
 see the [next section](#want-to-have-multiple-connections)
@@ -90,21 +83,6 @@ conn, err := pgstats.Connect("foo", "username", "password", pgstats.SslMode("dis
 - 9.6
 - 9.5
 - 9.4
-
-[Full pg_stat view / version table](https://github.com/vynaloze/pgstats/wiki/Supported-stats-vs-PG-version)
-
-## Roadmap
-Done? | Version | Content | ETA
---- | --- | --- | ---
-Y | `v0.1.0` | most stats available and tested in PG 10 | ~May '19
-Y | | setup CI for integration tests | ~May '19
-Y | `v0.2.0` | pg_stat_statements | ~June '19
-Y | `v0.3.0` | support PG 11 | ~June '19
-Y | `v0.4.0` | support PG 9.6 | ~June '19
-Y | `v0.5.0` | support PG 9.5 | ~June '19
-Y | `v0.6.0` | support PG 9.4 | ~June '19
-N | `v1.0.0` | global wrapper for the ease of use | ~July '19
-N | `v1.1.0` | add missing integration tests | ~July '19
 
 ## License
 The library is licensed under the [MIT License](LICENSE).

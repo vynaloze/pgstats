@@ -55,6 +55,7 @@ var connFailTestTable = []struct {
 }
 
 func TestCorrectConnection(t *testing.T) {
+	t.Parallel()
 	for _, tt := range connCorrectTestTable {
 		s := PgStats{}
 		err := s.prepareConnection(tt.dbname, tt.user, tt.password, tt.options...)
@@ -77,6 +78,7 @@ func TestCorrectConnection(t *testing.T) {
 }
 
 func TestFailConnection(t *testing.T) {
+	t.Parallel()
 	for _, tt := range connFailTestTable {
 		s := PgStats{}
 		err := s.prepareConnection(tt.dbname, tt.user, tt.password, tt.options...)
