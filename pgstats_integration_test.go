@@ -39,7 +39,7 @@ func TestPgWalReceiver(t *testing.T) {
 		t.Error(err)
 	}
 	_, err = s.PgStatWalReceiver()
-	if err != nil {
+	if err != nil && !strings.Contains(err.Error(), "Unsupported PostgreSQL version: 9.") {
 		if err.Error() != "sql: no rows in result set" { //fixme hack until there is test env for replication stats
 			t.Error(err)
 		}
@@ -72,7 +72,7 @@ func TestPgStatProgressVacuum(t *testing.T) {
 		t.Error(err)
 	}
 	_, err = s.PgStatProgressVacuum()
-	if err != nil {
+	if err != nil && !strings.Contains(err.Error(), "Unsupported PostgreSQL version: 9.") {
 		t.Error(err)
 	}
 }

@@ -28,6 +28,7 @@ func (s *PgStats) Close() error {
 
 // PgStatActivity returns a slice, containing information related to the current activity of a process,
 // such as state and current query, for each server process.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ACTIVITY-VIEW
 func (s *PgStats) PgStatActivity() (PgStatActivityView, error) {
@@ -36,6 +37,7 @@ func (s *PgStats) PgStatActivity() (PgStatActivityView, error) {
 
 // PgStatReplication returns a slice, containing statistics about each WAL sender process,
 // showing information about replication to that sender's connected standby server.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-REPLICATION-VIEW
 func (s *PgStats) PgStatReplication() (PgStatReplicationView, error) {
@@ -44,6 +46,9 @@ func (s *PgStats) PgStatReplication() (PgStatReplicationView, error) {
 
 // PgStatWalReceiver returns a single struct,
 // containing statistics about the WAL receiver from that receiver's connected server.
+//
+// Supported since PostgreSQL 9.6.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-WAL-RECEIVER-VIEW
 func (s *PgStats) PgStatWalReceiver() (PgStatWalReceiverView, error) {
@@ -53,7 +58,9 @@ func (s *PgStats) PgStatWalReceiver() (PgStatWalReceiverView, error) {
 // PgStatSubscription returns a slice, containing statistics about
 // subscription for main worker (with null PID if the worker is not running),
 // and workers handling the initial data copy of the subscribed tables.
+//
 // Supported since PostgreSQL 10.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-SUBSCRIPTION
 func (s *PgStats) PgStatSubscription() (PgStatSubscriptionView, error) {
@@ -62,6 +69,7 @@ func (s *PgStats) PgStatSubscription() (PgStatSubscriptionView, error) {
 
 // PgStatSsl returns a slice, containing statistics about SSL usage
 // on the connection for each backend or WAL sender process.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-SSL
 func (s *PgStats) PgStatSsl() (PgStatSslView, error) {
@@ -71,6 +79,9 @@ func (s *PgStats) PgStatSsl() (PgStatSslView, error) {
 // PgStatProgressVacuum returns a slice, containing information related to currently running VACUUM processes,
 // for each backend (including autovacuum worker processes) that is currently vacuuming.
 // Progress reporting is not currently supported for VACUUM FULL and backends running VACUUM FULL will not be listed in this view.
+//
+// Supported since PostgreSQL 9.6.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/progress-reporting.html#VACUUM-PROGRESS-REPORTING
 func (s *PgStats) PgStatProgressVacuum() (PgStatProgressVacuumView, error) {
@@ -79,6 +90,7 @@ func (s *PgStats) PgStatProgressVacuum() (PgStatProgressVacuumView, error) {
 
 // PgStatArchiver returns a single struct, containing global data for the cluster,
 // showing statistics about the WAL archiver process's activity.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ARCHIVER-VIEW
 func (s *PgStats) PgStatArchiver() (PgStatArchiverView, error) {
@@ -87,6 +99,7 @@ func (s *PgStats) PgStatArchiver() (PgStatArchiverView, error) {
 
 // PgStatBgWriter returns a single struct, containing global data for the cluster,
 // showing statistics about the background writer process's activity.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-BGWRITER-VIEW
 func (s *PgStats) PgStatBgWriter() (PgStatBgWriterView, error) {
@@ -94,6 +107,7 @@ func (s *PgStats) PgStatBgWriter() (PgStatBgWriterView, error) {
 }
 
 // PgStatDatabase returns a slice containing database-wide statistics for each database in the cluster.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-DATABASE-VIEW
 func (s *PgStats) PgStatDatabase() (PgStatDatabaseView, error) {
@@ -103,6 +117,7 @@ func (s *PgStats) PgStatDatabase() (PgStatDatabaseView, error) {
 // PgStatDatabaseConflicts returns a slice containing database-wide statistics for each database in the cluster about
 // query cancels occurring due to conflicts with recovery on standby servers.
 // This will only contain information on standby servers, since conflicts do not occur on master servers.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-DATABASE-CONFLICTS-VIEW
 func (s *PgStats) PgStatDatabaseConflicts() (PgStatDatabaseConflictsView, error) {
@@ -111,6 +126,7 @@ func (s *PgStats) PgStatDatabaseConflicts() (PgStatDatabaseConflictsView, error)
 
 // PgStatAllTables returns a slice containing statistics about accesses
 // to each table in the current database (including TOAST tables).
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW
 func (s *PgStats) PgStatAllTables() (PgStatAllTablesView, error) {
@@ -119,6 +135,7 @@ func (s *PgStats) PgStatAllTables() (PgStatAllTablesView, error) {
 
 // PgStatSystemTables returns a slice containing statistics about accesses
 // to each system table in the current database (including TOAST tables).
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW
 func (s *PgStats) PgStatSystemTables() (PgStatSystemTablesView, error) {
@@ -127,6 +144,7 @@ func (s *PgStats) PgStatSystemTables() (PgStatSystemTablesView, error) {
 
 // PgStatUserTables returns a slice containing statistics about accesses
 // to each user-defined table in the current database (including TOAST tables).
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW
 func (s *PgStats) PgStatUserTables() (PgStatUserTablesView, error) {
@@ -159,6 +177,7 @@ func (s *PgStats) PgStatXactUserTables() (PgStatXactUserTablesView, error) {
 
 // PgStatAllIndexes returns a slice containing statistics about accesses
 // to each index in the current database.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-INDEXES-VIEW
 func (s *PgStats) PgStatAllIndexes() (PgStatAllIndexesView, error) {
@@ -167,6 +186,7 @@ func (s *PgStats) PgStatAllIndexes() (PgStatAllIndexesView, error) {
 
 // PgStatSystemIndexes returns a slice containing statistics about accesses
 // to each system index in the current database.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-INDEXES-VIEW
 func (s *PgStats) PgStatSystemIndexes() (PgStatSystemIndexesView, error) {
@@ -175,6 +195,7 @@ func (s *PgStats) PgStatSystemIndexes() (PgStatSystemIndexesView, error) {
 
 // PgStatUserIndexes returns a slice containing statistics about accesses
 // to each user-defined index in the current database.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ALL-INDEXES-VIEW
 func (s *PgStats) PgStatUserIndexes() (PgStatUserIndexesView, error) {
@@ -183,6 +204,7 @@ func (s *PgStats) PgStatUserIndexes() (PgStatUserIndexesView, error) {
 
 // PgStatIoAllTables returns a slice containing statistics about I/O
 // on each table in the current database (including TOAST tables).
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-TABLES-VIEW
 func (s *PgStats) PgStatIoAllTables() (PgStatIoAllTablesView, error) {
@@ -191,6 +213,7 @@ func (s *PgStats) PgStatIoAllTables() (PgStatIoAllTablesView, error) {
 
 // PgStatIoSystemTables returns a slice containing statistics about I/O
 // on each system table in the current database (including TOAST tables).
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-TABLES-VIEW
 func (s *PgStats) PgStatIoSystemTables() (PgStatIoSystemTablesView, error) {
@@ -199,6 +222,7 @@ func (s *PgStats) PgStatIoSystemTables() (PgStatIoSystemTablesView, error) {
 
 // PgStatIoUserTables returns a slice containing statistics about I/O
 // on each user-defined table in the current database (including TOAST tables).
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-TABLES-VIEW
 func (s *PgStats) PgStatIoUserTables() (PgStatIoUserTablesView, error) {
@@ -207,6 +231,7 @@ func (s *PgStats) PgStatIoUserTables() (PgStatIoUserTablesView, error) {
 
 // PgStatIoAllIndexes returns a slice containing statistics about I/O
 // on each index in the current database.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-INDEXES-VIEW
 func (s *PgStats) PgStatIoAllIndexes() (PgStatIoAllIndexesView, error) {
@@ -215,6 +240,7 @@ func (s *PgStats) PgStatIoAllIndexes() (PgStatIoAllIndexesView, error) {
 
 // PgStatIoSystemIndexes returns a slice containing statistics about I/O
 // on each system index in the current database.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-INDEXES-VIEW
 func (s *PgStats) PgStatIoSystemIndexes() (PgStatIoSystemIndexesView, error) {
@@ -223,6 +249,7 @@ func (s *PgStats) PgStatIoSystemIndexes() (PgStatIoSystemIndexesView, error) {
 
 // PgStatIoUserIndexes returns a slice containing statistics about I/O
 // on each user-defined index in the current database.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-INDEXES-VIEW
 func (s *PgStats) PgStatIoUserIndexes() (PgStatIoUserIndexesView, error) {
@@ -231,6 +258,7 @@ func (s *PgStats) PgStatIoUserIndexes() (PgStatIoUserIndexesView, error) {
 
 // PgStatIoAllSequences returns a slice containing statistics about I/O
 // on each sequence in the current database.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-SEQUENCES-VIEW
 func (s *PgStats) PgStatIoAllSequences() (PgStatIoAllSequencesView, error) {
@@ -239,7 +267,8 @@ func (s *PgStats) PgStatIoAllSequences() (PgStatIoAllSequencesView, error) {
 
 // PgStatIoSystemSequences returns a slice containing statistics about I/O
 // on each system sequence in the current database.
-// (Presently, no system sequences are defined, so this view is always empty.)
+// (As of PostgreSQL 11, no system sequences are defined, so this view is always empty.)
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-SEQUENCES-VIEW
 func (s *PgStats) PgStatIoSystemSequences() (PgStatIoSystemSequencesView, error) {
@@ -248,6 +277,7 @@ func (s *PgStats) PgStatIoSystemSequences() (PgStatIoSystemSequencesView, error)
 
 // PgStatIoUserSequences returns a slice containing statistics about I/O
 // on each user-defined sequence in the current database.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STATIO-ALL-SEQUENCES-VIEW
 func (s *PgStats) PgStatIoUserSequences() (PgStatIoUserSequencesView, error) {
@@ -256,6 +286,7 @@ func (s *PgStats) PgStatIoUserSequences() (PgStatIoUserSequencesView, error) {
 
 // PgStatUserFunctions returns a slice containing statistics about executions
 // of each tracked function in the current database.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-USER-FUNCTIONS-VIEW
 func (s *PgStats) PgStatUserFunctions() (PgStatUserFunctionsView, error) {
@@ -272,6 +303,7 @@ func (s *PgStats) PgStatXactUserFunctions() (PgStatXactUserFunctionsView, error)
 
 // PgStatStatements returns a slice containing statistics about executions
 // of all SQL statements in the current database.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/pgstatstatements.html
 func (s *PgStats) PgStatStatements() (PgStatStatementsView, error) {

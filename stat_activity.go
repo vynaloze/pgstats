@@ -45,13 +45,18 @@ type PgStatActivityRow struct {
 	// ime when the state was last changed
 	StateChange pq.NullTime `json:"state_change"`
 	// The type of event for which the backend is waiting, if any; otherwise NULL.
+	// Supported since PostgreSQL 9.6.
 	// For possible values, see:
 	// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ACTIVITY-VIEW
 	WaitEventType sql.NullString `json:"wait_event_type"`
 	// Wait event name if backend is currently waiting, otherwise NULL.
+	// Supported since PostgreSQL 9.6.
 	// For details, see:
 	// https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-TABLE
 	WaitEvent sql.NullString `json:"wait_event"`
+	// True if this backend is currently waiting on a lock.
+	// Supported until PostgreSQL 9.5 (inclusive).
+	Waiting sql.NullBool `json:"waiting"`
 	// Current overall state of this backend.
 	// For possible values, see:
 	// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ACTIVITY-VIEW
@@ -80,11 +85,13 @@ func (s *PgStats) fetchActivity() ([]PgStatActivityRow, error) {
 	if err != nil {
 		return nil, err
 	}
-	if version < 10 {
-		return s.fetchActivity96()
-	} else {
+	if version > 9.6 {
 		return s.fetchActivity10()
 	}
+	if version == 9.6 {
+		return s.fetchActivity96()
+	}
+	return s.fetchActivity95()
 }
 
 func (s *PgStats) fetchActivity10() ([]PgStatActivityRow, error) {
@@ -134,6 +141,34 @@ func (s *PgStats) fetchActivity96() ([]PgStatActivityRow, error) {
 		err := rows.Scan(&row.Datid, &row.Datname, &row.Pid, &row.Usesysid, &row.Usename,
 			&row.ApplicationName, &row.ClientAddr, &row.ClientHostname, &row.ClientPort, &row.BackendStart,
 			&row.XactStart, &row.QueryStart, &row.StateChange, &row.WaitEventType, &row.WaitEvent,
+			&row.State, &row.BackendXid, &row.BackendXmin, &row.Query)
+		if err != nil {
+			return nil, err
+		}
+		data = append(data, *row)
+	}
+	return data, rows.Err()
+}
+
+func (s *PgStats) fetchActivity95() ([]PgStatActivityRow, error) {
+	db := s.conn.db
+	query := "select datid,datname,pid,usesysid,usename," +
+		"application_name,client_addr,client_hostname,client_port,backend_start," +
+		"xact_start,query_start,state_change,waiting," +
+		"state,backend_xid,backend_xmin,query from pg_stat_activity"
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	data := make([]PgStatActivityRow, 0)
+	for rows.Next() {
+		row := new(PgStatActivityRow)
+		err := rows.Scan(&row.Datid, &row.Datname, &row.Pid, &row.Usesysid, &row.Usename,
+			&row.ApplicationName, &row.ClientAddr, &row.ClientHostname, &row.ClientPort, &row.BackendStart,
+			&row.XactStart, &row.QueryStart, &row.StateChange, &row.Waiting,
 			&row.State, &row.BackendXid, &row.BackendXmin, &row.Query)
 		if err != nil {
 			return nil, err

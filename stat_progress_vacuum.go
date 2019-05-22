@@ -1,6 +1,9 @@
 package pgstats
 
-import "database/sql"
+import (
+	"database/sql"
+	"github.com/pkg/errors"
+)
 
 // PgStatProgressVacuumView represents content of pg_stat_progress_vacuum view
 type PgStatProgressVacuumView []PgStatProgressVacuumRow
@@ -38,6 +41,14 @@ type PgStatProgressVacuumRow struct {
 }
 
 func (s *PgStats) fetchProgressVacuum() (PgStatProgressVacuumView, error) {
+	version, err := s.getPgVersion()
+	if err != nil {
+		return nil, err
+	}
+	if version < 9.6 {
+		return nil, errors.Errorf("Unsupported PostgreSQL version: %f", version)
+	}
+
 	db := s.conn.db
 	query := "select pid,datid,datname,relid,phase," +
 		"heap_blks_total,heap_blks_scanned,heap_blks_vacuumed,index_vacuum_count,max_dead_tuples," +

@@ -3,6 +3,7 @@ package pgstats
 import (
 	"database/sql"
 	"github.com/lib/pq"
+	"github.com/pkg/errors"
 )
 
 // PgStatWalReceiverView represents content of pg_stat_wal_receiver view
@@ -48,11 +49,13 @@ func (s *PgStats) fetchWalReceiver() (PgStatWalReceiverView, error) {
 	if err != nil {
 		return PgStatWalReceiverView{}, err
 	}
-	if version < 11 {
-		return s.fetchWalReceiver10()
-	} else {
+	if version > 10 {
 		return s.fetchWalReceiver11()
 	}
+	if version == 10 || version == 9.6 {
+		return s.fetchWalReceiver10()
+	}
+	return PgStatWalReceiverView{}, errors.Errorf("Unsupported PostgreSQL version: %f", version)
 }
 
 func (s *PgStats) fetchWalReceiver11() (PgStatWalReceiverView, error) {
