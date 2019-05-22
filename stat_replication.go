@@ -47,17 +47,20 @@ type PgStatReplicationRow struct {
 	// has written it (but not yet flushed it or applied it). This can be used to gauge the delay
 	// that synchronous_commit level remote_write incurred while committing
 	// if this server was configured as a synchronous standby.
-	WriteLag pq.NullTime `json:"write_lag"` // fixme?
+	// Supported since PostgreSQL 10
+	WriteLag pq.NullTime `json:"write_lag"`
 	// Time elapsed between flushing recent WAL locally and receiving notification that this standby server
 	// has written 	// and flushed it (but not yet applied it). This can be used to gauge the delay
 	// that synchronous_commit level on incurred while committing
 	// if this server was configured as a synchronous standby.
-	FlushLag pq.NullTime `json:"flush_lag"` // fixme?
+	// Supported since PostgreSQL 10
+	FlushLag pq.NullTime `json:"flush_lag"`
 	// Time elapsed between flushing recent WAL locally and receiving notification that this standby server
 	// has written, flushed and applied it. This can be used to gauge the delay
 	// that synchronous_commit level remote_apply incurred while committing
 	// if this server was configured as a synchronous standby.
-	ReplayLag pq.NullTime `json:"replay_lag"` // fixme?
+	// Supported since PostgreSQL 10
+	ReplayLag pq.NullTime `json:"replay_lag"`
 	// Priority of this standby server for being chosen as the synchronous standby
 	// in a priority-based synchronous replication. This has no effect in a quorum-based synchronous replication.
 	SyncPriority sql.NullInt64 `json:"sync_priority"`
@@ -68,6 +71,18 @@ type PgStatReplicationRow struct {
 }
 
 func (s *PgStats) fetchReplication() ([]PgStatReplicationRow, error) {
+	version, err := s.getPgVersion()
+	if err != nil {
+		return nil, err
+	}
+	if version < 10 {
+		return s.fetchReplication96()
+	} else {
+		return s.fetchReplication10()
+	}
+}
+
+func (s *PgStats) fetchReplication10() ([]PgStatReplicationRow, error) {
 	db := s.conn.db
 	query := "select pid,usesysid,usename,application_name,client_addr," +
 		"client_hostname,client_port,backend_start,backend_xmin,state," +
@@ -87,6 +102,33 @@ func (s *PgStats) fetchReplication() ([]PgStatReplicationRow, error) {
 			&row.ClientHostname, &row.ClientPort, &row.BackendStart, &row.BackendXmin, &row.State,
 			&row.SentLsn, &row.WriteLsn, &row.FlushLsn, &row.ReplayLsn, &row.WriteLag,
 			&row.FlushLag, &row.ReplayLag, &row.SyncPriority, &row.SyncState)
+		if err != nil {
+			return nil, err
+		}
+		data = append(data, *row)
+	}
+	return data, rows.Err()
+}
+
+func (s *PgStats) fetchReplication96() ([]PgStatReplicationRow, error) {
+	db := s.conn.db
+	query := "select pid,usesysid,usename,application_name,client_addr," +
+		"client_hostname,client_port,backend_start,backend_xmin,state," +
+		"sent_location,write_location,flush_location,replay_location," +
+		"sync_priority,sync_state from pg_stat_replication"
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	data := make([]PgStatReplicationRow, 0)
+	for rows.Next() {
+		row := new(PgStatReplicationRow)
+		err := rows.Scan(&row.Pid, &row.Usesysid, &row.Usename, &row.ApplicationName, &row.ClientAddr,
+			&row.ClientHostname, &row.ClientPort, &row.BackendStart, &row.BackendXmin, &row.State,
+			&row.SentLsn, &row.WriteLsn, &row.FlushLsn, &row.ReplayLsn, &row.SyncPriority, &row.SyncState)
 		if err != nil {
 			return nil, err
 		}

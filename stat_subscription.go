@@ -3,6 +3,7 @@ package pgstats
 import (
 	"database/sql"
 	"github.com/lib/pq"
+	"github.com/pkg/errors"
 )
 
 // PgStatSubscriptionView reprowents content of pg_stat_subscription view
@@ -31,6 +32,14 @@ type PgStatSubscriptionRow struct {
 }
 
 func (s *PgStats) fetchSubscription() (PgStatSubscriptionView, error) {
+	version, err := s.getPgVersion()
+	if err != nil {
+		return nil, err
+	}
+	if version < 10 {
+		return nil, errors.Errorf("Unsupported PostgreSQL version: %f", version)
+	}
+
 	db := s.conn.db
 	query := "select subid,subname,pid,relid,received_lsn," +
 		"last_msg_send_time,last_msg_receipt_time,latest_end_lsn,latest_end_time " +

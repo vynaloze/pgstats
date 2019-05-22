@@ -1,7 +1,9 @@
 package pgstats
 
-import "database/sql"
-import "github.com/lib/pq"
+import (
+	"database/sql"
+	"github.com/lib/pq"
+)
 
 // PgStatActivityView represents content of pg_stat_activity view
 type PgStatActivityView []PgStatActivityRow
@@ -69,10 +71,23 @@ type PgStatActivityRow struct {
 	// logical replication worker, parallel worker, background writer, client backend, checkpointer,
 	// startup, walreceiver, walsender and walwriter.
 	// In addition, background workers registered by extensions may have additional types.
+	// Supported since PostgreSQL 10
 	BackendType sql.NullString `json:"backend_type"`
 }
 
 func (s *PgStats) fetchActivity() ([]PgStatActivityRow, error) {
+	version, err := s.getPgVersion()
+	if err != nil {
+		return nil, err
+	}
+	if version < 10 {
+		return s.fetchActivity96()
+	} else {
+		return s.fetchActivity10()
+	}
+}
+
+func (s *PgStats) fetchActivity10() ([]PgStatActivityRow, error) {
 	db := s.conn.db
 	query := "select datid,datname,pid,usesysid,usename," +
 		"application_name,client_addr,client_hostname,client_port,backend_start," +
@@ -92,6 +107,34 @@ func (s *PgStats) fetchActivity() ([]PgStatActivityRow, error) {
 			&row.ApplicationName, &row.ClientAddr, &row.ClientHostname, &row.ClientPort, &row.BackendStart,
 			&row.XactStart, &row.QueryStart, &row.StateChange, &row.WaitEventType, &row.WaitEvent,
 			&row.State, &row.BackendXid, &row.BackendXmin, &row.Query, &row.BackendType)
+		if err != nil {
+			return nil, err
+		}
+		data = append(data, *row)
+	}
+	return data, rows.Err()
+}
+
+func (s *PgStats) fetchActivity96() ([]PgStatActivityRow, error) {
+	db := s.conn.db
+	query := "select datid,datname,pid,usesysid,usename," +
+		"application_name,client_addr,client_hostname,client_port,backend_start," +
+		"xact_start,query_start,state_change,wait_event_type,wait_event," +
+		"state,backend_xid,backend_xmin,query from pg_stat_activity"
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	data := make([]PgStatActivityRow, 0)
+	for rows.Next() {
+		row := new(PgStatActivityRow)
+		err := rows.Scan(&row.Datid, &row.Datname, &row.Pid, &row.Usesysid, &row.Usename,
+			&row.ApplicationName, &row.ClientAddr, &row.ClientHostname, &row.ClientPort, &row.BackendStart,
+			&row.XactStart, &row.QueryStart, &row.StateChange, &row.WaitEventType, &row.WaitEvent,
+			&row.State, &row.BackendXid, &row.BackendXmin, &row.Query)
 		if err != nil {
 			return nil, err
 		}

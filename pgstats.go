@@ -53,6 +53,7 @@ func (s *PgStats) PgStatWalReceiver() (PgStatWalReceiverView, error) {
 // PgStatSubscription returns a slice, containing statistics about
 // subscription for main worker (with null PID if the worker is not running),
 // and workers handling the initial data copy of the subscribed tables.
+// Supported since PostgreSQL 10.
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-SUBSCRIPTION
 func (s *PgStats) PgStatSubscription() (PgStatSubscriptionView, error) {

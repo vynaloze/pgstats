@@ -5,6 +5,7 @@ package pgstats_test
 import (
 	"flag"
 	"github.com/vynaloze/pgstats"
+	"strings"
 	"testing"
 )
 
@@ -51,7 +52,7 @@ func TestPgSubscription(t *testing.T) {
 		t.Error(err)
 	}
 	_, err = s.PgStatSubscription()
-	if err != nil {
+	if err != nil && !strings.Contains(err.Error(), "Unsupported PostgreSQL version: 9.") {
 		t.Error(err)
 	}
 }
