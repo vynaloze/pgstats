@@ -3,28 +3,32 @@ package pgstats
 import (
 	"github.com/pkg/errors"
 	"regexp"
+	"strconv"
 )
 
-func (s *PgStats) getPgVersion() (string, error) {
+func (s *PgStats) getPgVersion() (float64, error) {
 	db := s.conn.db
 	query := "show server_version;"
 	row := db.QueryRow(query)
 	version := new(string)
-	err := row.Scan(&version)
-	if err != nil {
-		return "", err
+	if err := row.Scan(&version); err != nil {
+		return 0, err
 	}
-	v := extractMajorVersion(*version)
-	if v == "" {
-		err = errors.New("Regex error")
-	}
-	return v, err
+	return extractMajorVersion(*version)
 }
 
-func extractMajorVersion(fullVersion string) string {
+func extractMajorVersion(fullVersion string) (float64, error) {
 	r, err := regexp.Compile(`(^9\.\d)|(^\d\d)`)
 	if err != nil {
-		return ""
+		return 0, errors.New("Regex compile error")
 	}
-	return r.FindString(fullVersion)
+	strv := r.FindString(fullVersion)
+	if strv == "" {
+		return 0, errors.New("Regex parse error")
+	}
+	version, err := strconv.ParseFloat(strv, 64)
+	if err != nil {
+		return 0, err
+	}
+	return version, nil
 }
