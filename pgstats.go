@@ -4,8 +4,6 @@
 // For details, see: https://github.com/vynaloze/pgstats/blob/master/README.md
 package pgstats
 
-import "regexp"
-
 // PgStats holds a single connection to the database
 // and provides a convenient access to all postgres monitoring statistics.
 type PgStats struct {
@@ -277,20 +275,4 @@ func (s *PgStats) PgStatXactUserFunctions() (PgStatXactUserFunctionsView, error)
 // https://www.postgresql.org/docs/current/pgstatstatements.html
 func (s *PgStats) PgStatStatements() (PgStatStatementsView, error) {
 	return s.fetchStatements()
-}
-
-func (s *PgStats) getPgVersion() (string, error) {
-	r, err := regexp.Compile(`(^9\.\d)|(^\d\d)`)
-	if err != nil {
-		return "", err
-	}
-	db := s.conn.db
-	query := "show server_version;"
-	row := db.QueryRow(query)
-	version := new(string)
-	err = row.Scan(&version)
-	if err != nil {
-		return "", err
-	}
-	return r.FindString(*version), nil
 }
