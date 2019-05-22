@@ -1,6 +1,9 @@
 package pgstats
 
-import "database/sql"
+import (
+	"database/sql"
+	"github.com/pkg/errors"
+)
 
 // PgStatSslView represents content of pg_stat_ssl view
 type PgStatSslView []PgStatSslRow
@@ -26,6 +29,14 @@ type PgStatSslRow struct {
 }
 
 func (s *PgStats) fetchSsl() (PgStatSslView, error) {
+	version, err := s.getPgVersion()
+	if err != nil {
+		return nil, err
+	}
+	if version < 9.5 {
+		return nil, errors.Errorf("Unsupported PostgreSQL version: %f", version)
+	}
+
 	db := s.conn.db
 	query := "select pid,ssl,version,cipher,bits," +
 		"compression,clientdn from pg_stat_ssl"

@@ -16,14 +16,19 @@ type PgStatStatementsRow struct {
 	// Number of times executed
 	Calls int64 `json:"calls"`
 	// Total time spent in the statement, in milliseconds
+	// Supported since PostgreSQL 9.5
 	TotalTime float64 `json:"total_time"`
 	// Minimum time spent in the statement, in milliseconds
+	// Supported since PostgreSQL 9.5
 	MinTime float64 `json:"min_time"`
 	// Maximum time spent in the statement, in milliseconds
+	// Supported since PostgreSQL 9.5
 	MaxTime float64 `json:"max_time"`
 	// Mean time spent in the statement, in milliseconds
+	// Supported since PostgreSQL 9.5
 	MeanTime float64 `json:"mean_time"`
 	// Population standard deviation of time spent in the statement, in milliseconds
+	// Supported since PostgreSQL 9.5
 	StddevTime float64 `json:"stddev_time"`
 	// Total number of rows retrieved or affected by the statement
 	Rows int64 `json:"rows"`
@@ -54,6 +59,17 @@ type PgStatStatementsRow struct {
 }
 
 func (s *PgStats) fetchStatements() (PgStatStatementsView, error) {
+	version, err := s.getPgVersion()
+	if err != nil {
+		return nil, err
+	}
+	if version > 9.4 {
+		return s.fetchStatements95()
+	}
+	return s.fetchStatements94()
+}
+
+func (s *PgStats) fetchStatements95() (PgStatStatementsView, error) {
 	db := s.conn.db
 	query := "select userid,dbid,queryid,query,calls," +
 		"total_time,min_time,max_time,mean_time,stddev_time," +
@@ -72,6 +88,34 @@ func (s *PgStats) fetchStatements() (PgStatStatementsView, error) {
 		row := new(PgStatStatementsRow)
 		err := rows.Scan(&row.Userid, &row.Dbid, &row.Queryid, &row.Query, &row.Calls,
 			&row.TotalTime, &row.MinTime, &row.MaxTime, &row.MeanTime, &row.StddevTime,
+			&row.Rows, &row.SharedBlksHit, &row.SharedBlksRead, &row.SharedBlksDirtied, &row.SharedBlksWritten,
+			&row.LocalBlksHit, &row.LocalBlksRead, &row.LocalBlksDirtied, &row.LocalBlksWritten, &row.TempBlksRead,
+			&row.TempBlksWritten, &row.BlkReadTime, &row.BlkWriteTime)
+		if err != nil {
+			return nil, err
+		}
+		data = append(data, *row)
+	}
+	return data, rows.Err()
+}
+
+func (s *PgStats) fetchStatements94() (PgStatStatementsView, error) {
+	db := s.conn.db
+	query := "select userid,dbid,queryid,query,calls," +
+		"rows,shared_blks_hit,shared_blks_read,shared_blks_dirtied,shared_blks_written," +
+		"local_blks_hit,local_blks_read,local_blks_dirtied,local_blks_written,temp_blks_read," +
+		"temp_blks_written,blk_read_time,blk_write_time from pg_stat_statements"
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	data := make([]PgStatStatementsRow, 0)
+	for rows.Next() {
+		row := new(PgStatStatementsRow)
+		err := rows.Scan(&row.Userid, &row.Dbid, &row.Queryid, &row.Query, &row.Calls,
 			&row.Rows, &row.SharedBlksHit, &row.SharedBlksRead, &row.SharedBlksDirtied, &row.SharedBlksWritten,
 			&row.LocalBlksHit, &row.LocalBlksRead, &row.LocalBlksDirtied, &row.LocalBlksWritten, &row.TempBlksRead,
 			&row.TempBlksWritten, &row.BlkReadTime, &row.BlkWriteTime)

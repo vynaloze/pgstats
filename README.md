@@ -89,6 +89,7 @@ conn, err := pgstats.Connect("foo", "username", "password", pgstats.SslMode("dis
 - 10
 - 9.6
 - 9.5
+- 9.4
 
 [Full pg_stat view / version table](https://github.com/vynaloze/pgstats/wiki/Supported-stats-vs-PG-version)
 
@@ -101,7 +102,7 @@ Y | `v0.2.0` | pg_stat_statements | ~June '19
 Y | `v0.3.0` | support PG 11 | ~June '19
 Y | `v0.4.0` | support PG 9.6 | ~June '19
 Y | `v0.5.0` | support PG 9.5 | ~June '19
-N | `v0.6.0` | support PG 9.4 | ~June '19
+Y | `v0.6.0` | support PG 9.4 | ~June '19
 N | `v1.0.0` | global wrapper for the ease of use | ~July '19
 N | `v1.1.0` | add missing integration tests | ~July '19
 

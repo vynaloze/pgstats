@@ -63,7 +63,15 @@ func TestPgSsl(t *testing.T) {
 		t.Error(err)
 	}
 	a, err := s.PgStatSsl()
-	validate(t, len(a), err)
+	if err != nil {
+		if strings.Contains(err.Error(), "Unsupported PostgreSQL version: 9.") {
+			return
+		}
+		t.Error(err)
+	}
+	if len(a) == 0 {
+		t.Error("No data returned by query")
+	}
 }
 
 func TestPgStatProgressVacuum(t *testing.T) {

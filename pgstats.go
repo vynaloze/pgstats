@@ -70,6 +70,8 @@ func (s *PgStats) PgStatSubscription() (PgStatSubscriptionView, error) {
 // PgStatSsl returns a slice, containing statistics about SSL usage
 // on the connection for each backend or WAL sender process.
 //
+// Supported since PostgreSQL 9.5.
+//
 // For more details, see:
 // https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-SSL
 func (s *PgStats) PgStatSsl() (PgStatSslView, error) {
