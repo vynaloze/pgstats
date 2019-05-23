@@ -1,7 +1,7 @@
 package pgstats
 
 import (
-	"database/sql"
+	"github.com/vynaloze/pgstats/nullable"
 )
 
 // PgStatIoAllTablesView represents content of pg_statio_all_tables view
@@ -22,21 +22,21 @@ type PgStatIoTablesRow struct {
 	// Name of this table
 	Relname string `json:"relname"`
 	// Number of disk blocks read from this table
-	HeapBlksRead sql.NullInt64 `json:"heap_blks_read"`
+	HeapBlksRead nullable.Int64 `json:"heap_blks_read"`
 	// Number of buffer hits in this table
-	HeapBlksHit sql.NullInt64 `json:"heap_blks_hit"`
+	HeapBlksHit nullable.Int64 `json:"heap_blks_hit"`
 	// Number of disk blocks read from all indexes on this table
-	IdxBlksRead sql.NullInt64 `json:"idx_blks_read"`
+	IdxBlksRead nullable.Int64 `json:"idx_blks_read"`
 	// Number of buffer hits in all indexes on this table
-	IdxBlksHit sql.NullInt64 `json:"idx_blks_hit"`
+	IdxBlksHit nullable.Int64 `json:"idx_blks_hit"`
 	// Number of disk blocks read from this table's TOAST table (if any)
-	ToastBlksRead sql.NullInt64 `json:"toast_blks_read"`
+	ToastBlksRead nullable.Int64 `json:"toast_blks_read"`
 	// Number of buffer hits in this table's TOAST table (if any)
-	ToastBlksHit sql.NullInt64 `json:"toast_blks_hit"`
+	ToastBlksHit nullable.Int64 `json:"toast_blks_hit"`
 	// Number of disk blocks read from this table's TOAST table indexes (if any)
-	TidxBlksRead sql.NullInt64 `json:"tidx_blks_read"`
+	TidxBlksRead nullable.Int64 `json:"tidx_blks_read"`
 	// Number of buffer hits in this table's TOAST table indexes (if any)
-	TidxBlksHit sql.NullInt64 `json:"tidx_blks_hit"`
+	TidxBlksHit nullable.Int64 `json:"tidx_blks_hit"`
 }
 
 func (s *PgStats) fetchIoTables(view string) ([]PgStatIoTablesRow, error) {

@@ -1,6 +1,8 @@
 package pgstats
 
-import "database/sql"
+import (
+	"github.com/vynaloze/pgstats/nullable"
+)
 
 // PgStatIoAllIndexesView represents content of pg_statio_all_indexes view
 type PgStatIoAllIndexesView []PgStatIoIndexesRow
@@ -24,9 +26,9 @@ type PgStatIoIndexesRow struct {
 	// Name of this index
 	Indexrelname string `json:"indexrelname"`
 	// Number of disk blocks read from this index
-	IdxBlksRead sql.NullInt64 `json:"idx_blks_read"`
+	IdxBlksRead nullable.Int64 `json:"idx_blks_read"`
 	// Number of buffer hits in this index
-	IdxBlksHit sql.NullInt64 `json:"idx_blks_hit"`
+	IdxBlksHit nullable.Int64 `json:"idx_blks_hit"`
 }
 
 func (s *PgStats) fetchIoIndexes(view string) ([]PgStatIoIndexesRow, error) {

@@ -1,7 +1,7 @@
 package pgstats
 
 import (
-	"database/sql"
+	"github.com/vynaloze/pgstats/nullable"
 )
 
 // PgStatDatabaseConflictsView represents content of pg_stat_database_conflicts view
@@ -14,15 +14,15 @@ type PgStatDatabaseConflictsRow struct {
 	// Name of this database
 	Datname string `json:"datname"`
 	// Number of queries in this database that have been canceled due to dropped tablespaces
-	ConflTablespace sql.NullInt64 `json:"confl_tablespace"`
+	ConflTablespace nullable.Int64 `json:"confl_tablespace"`
 	// Number of queries in this database that have been canceled due to lock timeouts
-	ConflLock sql.NullInt64 `json:"confl_lock"`
+	ConflLock nullable.Int64 `json:"confl_lock"`
 	// Number of queries in this database that have been canceled due to old snapshots
-	ConflSnapshot sql.NullInt64 `json:"confl_snapshot"`
+	ConflSnapshot nullable.Int64 `json:"confl_snapshot"`
 	// Number of queries in this database that have been canceled due to pinned buffers
-	ConflBufferpin sql.NullInt64 `json:"confl_bufferpin"`
+	ConflBufferpin nullable.Int64 `json:"confl_bufferpin"`
 	// Number of queries in this database that have been canceled due to deadlocks
-	ConflDeadlock sql.NullInt64 `json:"confl_deadlock"`
+	ConflDeadlock nullable.Int64 `json:"confl_deadlock"`
 }
 
 func (s *PgStats) fetchDatabaseConflicts() ([]PgStatDatabaseConflictsRow, error) {

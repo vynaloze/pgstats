@@ -1,8 +1,7 @@
 package pgstats
 
 import (
-	"database/sql"
-	"github.com/lib/pq"
+	"github.com/vynaloze/pgstats/nullable"
 )
 
 // PgStatAllTablesView represents content of pg_stat_all_tables view
@@ -23,43 +22,43 @@ type PgStatTablesRow struct {
 	// Name of this table
 	Relname string `json:"relname"`
 	// Number of sequential scans initiated on this table
-	SeqScan sql.NullInt64 `json:"seq_scan"`
+	SeqScan nullable.Int64 `json:"seq_scan"`
 	// Number of live rows fetched by sequential scans
-	SeqTupRead sql.NullInt64 `json:"seq_tup_read"`
+	SeqTupRead nullable.Int64 `json:"seq_tup_read"`
 	// Number of index scans initiated on this table
-	IdxScan sql.NullInt64 `json:"idx_scan"`
+	IdxScan nullable.Int64 `json:"idx_scan"`
 	// Number of live rows fetched by index scans
-	IdxTupFetch sql.NullInt64 `json:"idx_tup_fetch"`
+	IdxTupFetch nullable.Int64 `json:"idx_tup_fetch"`
 	// Number of rows inserted
-	NTupIns sql.NullInt64 `json:"n_tup_ins"`
+	NTupIns nullable.Int64 `json:"n_tup_ins"`
 	// Number of rows updated (includes HOT updated rows)
-	NTupUpd sql.NullInt64 `json:"n_tup_upd"`
+	NTupUpd nullable.Int64 `json:"n_tup_upd"`
 	// Number of rows deleted
-	NTupDel sql.NullInt64 `json:"n_tup_del"`
+	NTupDel nullable.Int64 `json:"n_tup_del"`
 	// Number of rows HOT updated (i.e., with no separate index update required)
-	NTupHotUpd sql.NullInt64 `json:"n_tup_hot_upd"`
+	NTupHotUpd nullable.Int64 `json:"n_tup_hot_upd"`
 	// Estimated number of live rows
-	NLiveTup sql.NullInt64 `json:"n_live_tup"`
+	NLiveTup nullable.Int64 `json:"n_live_tup"`
 	// Estimated number of dead rows
-	NDeadTup sql.NullInt64 `json:"n_dead_tup"`
+	NDeadTup nullable.Int64 `json:"n_dead_tup"`
 	// Estimated number of rows modified since this table was last analyzed
-	NModSinceAnalyze sql.NullInt64 `json:"n_mod_since_analyze"`
+	NModSinceAnalyze nullable.Int64 `json:"n_mod_since_analyze"`
 	// Last time at which this table was manually vacuumed (not counting VACUUM FULL)
-	LastVacuum pq.NullTime `json:"last_vacuum"`
+	LastVacuum nullable.Time `json:"last_vacuum"`
 	// Last time at which this table was vacuumed by the autovacuum daemon
-	LastAutovacuum pq.NullTime `json:"last_autovacuum"`
+	LastAutovacuum nullable.Time `json:"last_autovacuum"`
 	// Last time at which this table was manually analyzed
-	LastAnalyze pq.NullTime `json:"last_analyze"`
+	LastAnalyze nullable.Time `json:"last_analyze"`
 	// Last time at which this table was analyzed by the autovacuum daemon
-	LastAutoanalyze pq.NullTime `json:"last_autoanalyze"`
+	LastAutoanalyze nullable.Time `json:"last_autoanalyze"`
 	// Number of times this table has been manually vacuumed (not counting VACUUM FULL)
-	VacuumCount sql.NullInt64 `json:"vacuum_count"`
+	VacuumCount nullable.Int64 `json:"vacuum_count"`
 	// Number of times this table has been vacuumed by the autovacuum daemon
-	AutovacuumCount sql.NullInt64 `json:"autovacuum_count"`
+	AutovacuumCount nullable.Int64 `json:"autovacuum_count"`
 	// Number of times this table has been manually analyzed
-	AnalyzeCount sql.NullInt64 `json:"analyze_count"`
+	AnalyzeCount nullable.Int64 `json:"analyze_count"`
 	// Number of times this table has been analyzed by the autovacuum daemon
-	AutoanalyzeCount sql.NullInt64 `json:"autoanalyze_count"`
+	AutoanalyzeCount nullable.Int64 `json:"autoanalyze_count"`
 }
 
 func (s *PgStats) fetchTables(view string) ([]PgStatTablesRow, error) {

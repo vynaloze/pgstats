@@ -1,8 +1,7 @@
 package pgstats
 
 import (
-	"database/sql"
-	"github.com/lib/pq"
+	"github.com/vynaloze/pgstats/nullable"
 )
 
 // PgStatActivityView represents content of pg_stat_activity view
@@ -11,73 +10,73 @@ type PgStatActivityView []PgStatActivityRow
 // PgStatActivityRow represents schema of pg_stat_activity view
 type PgStatActivityRow struct {
 	// OID of the database this backend is connected to
-	Datid sql.NullInt64 `json:"datid"`
+	Datid nullable.Int64 `json:"datid"`
 	// Name of the database this backend is connected to
-	Datname sql.NullString `json:"datname"`
+	Datname nullable.String `json:"datname"`
 	// Process ID of this backend
 	Pid int64 `json:"pid"`
 	// OID of the user logged into this backend
-	Usesysid sql.NullInt64 `json:"usesysid"`
+	Usesysid nullable.Int64 `json:"usesysid"`
 	// Name of the user logged into this backend
-	Usename sql.NullString `json:"usename"`
+	Usename nullable.String `json:"usename"`
 	// Name of the application that is connected to this backend
-	ApplicationName sql.NullString `json:"application_name"`
+	ApplicationName nullable.String `json:"application_name"`
 	// IP address of the client connected to this backend.
 	// If this field is null, it indicates either that the client is connected via a Unix socket on the server machine
 	// or that this is an internal process such as autovacuum.
-	ClientAddr sql.NullString `json:"client_addr"`
+	ClientAddr nullable.String `json:"client_addr"`
 	// Host name of the connected client, as reported by a reverse DNS lookup of client_addr.
 	// This field will only be non-null for IP connections, and only when log_hostname is enabled.
-	ClientHostname sql.NullString `json:"client_hostname"`
+	ClientHostname nullable.String `json:"client_hostname"`
 	// TCP port number that the client is using for communication with this backend,
 	// or -1 if a Unix socket is used
-	ClientPort sql.NullInt64 `json:"client_port"`
+	ClientPort nullable.Int64 `json:"client_port"`
 	// Time when this process was started.
 	// For client backends, this is the time the client connected to the server.
-	BackendStart pq.NullTime `json:"backend_start"`
+	BackendStart nullable.Time `json:"backend_start"`
 	// Time when this process' current transaction was started,
 	// or null if no transaction is active.
 	// If the current query is the first of its transaction, this column is equal to the query_start column.
-	XactStart pq.NullTime `json:"xact_start"`
+	XactStart nullable.Time `json:"xact_start"`
 	// Time when the currently active query was started,
 	// or if state is not active, when the last query was started
-	QueryStart pq.NullTime `json:"query_start"`
+	QueryStart nullable.Time `json:"query_start"`
 	// ime when the state was last changed
-	StateChange pq.NullTime `json:"state_change"`
+	StateChange nullable.Time `json:"state_change"`
 	// The type of event for which the backend is waiting, if any; otherwise NULL.
 	// Supported since PostgreSQL 9.6.
 	// For possible values, see:
 	// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ACTIVITY-VIEW
-	WaitEventType sql.NullString `json:"wait_event_type"`
+	WaitEventType nullable.String `json:"wait_event_type"`
 	// Wait event name if backend is currently waiting, otherwise NULL.
 	// Supported since PostgreSQL 9.6.
 	// For details, see:
 	// https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-TABLE
-	WaitEvent sql.NullString `json:"wait_event"`
+	WaitEvent nullable.String `json:"wait_event"`
 	// True if this backend is currently waiting on a lock.
 	// Supported until PostgreSQL 9.5 (inclusive).
-	Waiting sql.NullBool `json:"waiting"`
+	Waiting nullable.Bool `json:"waiting"`
 	// Current overall state of this backend.
 	// For possible values, see:
 	// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-ACTIVITY-VIEW
-	State sql.NullString `json:"state"`
+	State nullable.String `json:"state"`
 	// Top-level transaction identifier of this backend, if any.
-	BackendXid sql.NullInt64 `json:"backend_xid"`
+	BackendXid nullable.Int64 `json:"backend_xid"`
 	// The current backend's xmin horizon.
-	BackendXmin sql.NullInt64 `json:"backend_xmin"`
+	BackendXmin nullable.Int64 `json:"backend_xmin"`
 	// Text of this backend's most recent query.
 	// If state is active this field shows the currently executing query.
 	// In all other states, it shows the last query that was executed.
 	// By default the query text is truncated at 1024 characters;
 	// this value can be changed via the parameter track_activity_query_size.
-	Query sql.NullString `json:"query"`
+	Query nullable.String `json:"query"`
 	// Type of current backend.
 	// Possible types are autovacuum launcher, autovacuum worker, logical replication launcher,
 	// logical replication worker, parallel worker, background writer, client backend, checkpointer,
 	// startup, walreceiver, walsender and walwriter.
 	// In addition, background workers registered by extensions may have additional types.
 	// Supported since PostgreSQL 10
-	BackendType sql.NullString `json:"backend_type"`
+	BackendType nullable.String `json:"backend_type"`
 }
 
 func (s *PgStats) fetchActivity() ([]PgStatActivityRow, error) {

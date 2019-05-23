@@ -1,6 +1,8 @@
 package pgstats
 
-import "database/sql"
+import (
+	"github.com/vynaloze/pgstats/nullable"
+)
 
 // PgStatAllIndexesView represents content of pg_stat_all_indexes view
 type PgStatAllIndexesView []PgStatIndexesRow
@@ -24,11 +26,11 @@ type PgStatIndexesRow struct {
 	// Name of this index
 	Indexrelname string `json:"indexrelname"`
 	// Number of index scans initiated on this index
-	IdxScan sql.NullInt64 `json:"idx_scan"`
+	IdxScan nullable.Int64 `json:"idx_scan"`
 	// Number of index entries returned by scans on this index
-	IdxTupRead sql.NullInt64 `json:"idx_tup_read"`
+	IdxTupRead nullable.Int64 `json:"idx_tup_read"`
 	// Number of live table rows fetched by simple index scans using this index
-	IdxTupFetch sql.NullInt64 `json:"idx_tup_fetch"`
+	IdxTupFetch nullable.Int64 `json:"idx_tup_fetch"`
 }
 
 func (s *PgStats) fetchIndexes(view string) ([]PgStatIndexesRow, error) {

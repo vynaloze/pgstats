@@ -1,8 +1,7 @@
 package pgstats
 
 import (
-	"database/sql"
-	"github.com/lib/pq"
+	"github.com/vynaloze/pgstats/nullable"
 )
 
 // PgStatDatabaseView represents content of pg_stat_database view
@@ -19,45 +18,45 @@ type PgStatDatabaseRow struct {
 	// all other columns return the accumulated values since the last reset.
 	NumBackends int64 `json:"numbackends"`
 	// Number of transactions in this database that have been committed
-	XactCommit sql.NullInt64 `json:"xact_commit"`
+	XactCommit nullable.Int64 `json:"xact_commit"`
 	//	Number of transactions in this database that have been rolled back
-	XactRollback sql.NullInt64 `json:"xact_rollback"`
+	XactRollback nullable.Int64 `json:"xact_rollback"`
 	// Number of disk blocks read in this database
-	BlksRead sql.NullInt64 `json:"blks_read"`
+	BlksRead nullable.Int64 `json:"blks_read"`
 	// Number of times disk blocks were found already in the buffer cache, so that a read was not necessary
 	// (this only includes hits in the PostgreSQL buffer cache, not the operating system's file system cache)
-	BlksHit sql.NullInt64 `json:"blks_hit"`
+	BlksHit nullable.Int64 `json:"blks_hit"`
 	// Number of rows returned by queries in this database
-	TupReturned sql.NullInt64 `json:"tup_returned"`
+	TupReturned nullable.Int64 `json:"tup_returned"`
 	// Number of rows fetched by queries in this database
-	TupFetched sql.NullInt64 `json:"tup_fetched"`
+	TupFetched nullable.Int64 `json:"tup_fetched"`
 	// Number of rows inserted by queries in this database
-	TupInserted sql.NullInt64 `json:"tup_inserted"`
+	TupInserted nullable.Int64 `json:"tup_inserted"`
 	// Number of rows updated by queries in this database
-	TupUpdated sql.NullInt64 `json:"tup_updated"`
+	TupUpdated nullable.Int64 `json:"tup_updated"`
 	// 	Number of rows deleted by queries in this database
-	TupDeleted sql.NullInt64 `json:"tup_deleted"`
+	TupDeleted nullable.Int64 `json:"tup_deleted"`
 	// Number of queries canceled due to conflicts with recovery in this database.
 	// (Conflicts occur only on standby servers; see pg_stat_database_conflicts for details.)
-	Conflicts sql.NullInt64 `json:"conflicts"`
+	Conflicts nullable.Int64 `json:"conflicts"`
 	// Number of temporary files created by queries in this database.
 	// All temporary files are counted,
 	// regardless of why the temporary file was created (e.g., sorting or hashing),
 	// and regardless of the log_temp_files setting.
-	TempFiles sql.NullInt64 `json:"temp_files"`
+	TempFiles nullable.Int64 `json:"temp_files"`
 	// Total amount of data written to temporary files by queries in this database.
 	// All temporary files are counted,
 	// regardless of why the temporary file was created,
 	// and regardless of the log_temp_files setting.
-	TempBytes sql.NullInt64 `json:"temp_bytes"`
+	TempBytes nullable.Int64 `json:"temp_bytes"`
 	// Number of deadlocks detected in this database
-	Deadlocks sql.NullInt64 `json:"deadlocks"`
+	Deadlocks nullable.Int64 `json:"deadlocks"`
 	// Time spent reading data file blocks by backends in this database, in milliseconds
-	BlkReadTime sql.NullFloat64 `json:"blk_read_time"`
+	BlkReadTime nullable.Float64 `json:"blk_read_time"`
 	// Time spent writing data file blocks by backends in this database, in milliseconds
-	BlkWriteTime sql.NullFloat64 `json:"blk_write_time"`
+	BlkWriteTime nullable.Float64 `json:"blk_write_time"`
 	// Time at which these statistics were last reset
-	StatsReset pq.NullTime `json:"stats_reset"`
+	StatsReset nullable.Time `json:"stats_reset"`
 }
 
 func (s *PgStats) fetchDatabases() ([]PgStatDatabaseRow, error) {

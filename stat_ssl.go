@@ -1,8 +1,8 @@
 package pgstats
 
 import (
-	"database/sql"
 	"github.com/pkg/errors"
+	"github.com/vynaloze/pgstats/nullable"
 )
 
 // PgStatSslView represents content of pg_stat_ssl view
@@ -15,17 +15,17 @@ type PgStatSslRow struct {
 	// True if SSL is used on this connection
 	Ssl bool `json:"ssl"`
 	// Version of SSL in use, or NULL if SSL is not in use on this connection
-	Version sql.NullString `json:"version"`
+	Version nullable.String `json:"version"`
 	// Name of SSL cipher in use, or NULL if SSL is not in use on this connection
-	Cipher sql.NullString `json:"cipher"`
+	Cipher nullable.String `json:"cipher"`
 	// Number of bits in the encryption algorithm used, or NULL if SSL is not used on this connection
-	Bits sql.NullInt64 `json:"bits"`
+	Bits nullable.Int64 `json:"bits"`
 	// True if SSL compression is in use, false if not, or NULL if SSL is not in use on this connection
-	Compression sql.NullBool `json:"compression"`
+	Compression nullable.Bool `json:"compression"`
 	// Distinguished Name (DN) field from the client certificate used,
 	// or NULL if no client certificate was supplied or if SSL is not in use on this connection.
 	// This field is truncated if the DN field is longer than NAMEDATALEN (64 characters in a standard build)
-	Clientdn sql.NullString `json:"clientdn"`
+	Clientdn nullable.String `json:"clientdn"`
 }
 
 func (s *PgStats) fetchSsl() (PgStatSslView, error) {

@@ -1,9 +1,8 @@
 package pgstats
 
 import (
-	"database/sql"
-	"github.com/lib/pq"
 	"github.com/pkg/errors"
+	"github.com/vynaloze/pgstats/nullable"
 )
 
 // PgStatSubscriptionView reprowents content of pg_stat_subscription view
@@ -12,23 +11,23 @@ type PgStatSubscriptionView []PgStatSubscriptionRow
 // PgStatSubscriptionRow reprowents schema of pg_stat_subscription view
 type PgStatSubscriptionRow struct {
 	// OID of the subscription
-	Subid sql.NullInt64 `json:"subid"`
+	Subid nullable.Int64 `json:"subid"`
 	// Name of the subscription
-	Subname sql.NullString `json:"subname"`
+	Subname nullable.String `json:"subname"`
 	// Process ID of the subscription worker process
-	Pid sql.NullInt64 `json:"pid"`
+	Pid nullable.Int64 `json:"pid"`
 	// OID of the relation that the worker is synchronizing; null for the main apply worker
-	Relid sql.NullInt64 `json:"relid"`
+	Relid nullable.Int64 `json:"relid"`
 	// Last write-ahead log location received, the initial value of this field being 0
-	ReceivedLsn sql.NullInt64 `json:"received_lsn"`
+	ReceivedLsn nullable.Int64 `json:"received_lsn"`
 	// Send time of last message received from origin WAL sender
-	LastMsgSendTime pq.NullTime `json:"last_msg_send_time"`
+	LastMsgSendTime nullable.Time `json:"last_msg_send_time"`
 	// Receipt time of last message received from origin WAL sender
-	LastMsgReceiptTime pq.NullTime `json:"last_msg_receipt_time"`
+	LastMsgReceiptTime nullable.Time `json:"last_msg_receipt_time"`
 	// Last write-ahead log location reported to origin WAL sender
-	LatestEndLsn sql.NullInt64 `json:"latest_end_lsn"`
+	LatestEndLsn nullable.Int64 `json:"latest_end_lsn"`
 	// Time of last write-ahead log location reported to origin WAL sender
-	LatestEndTime pq.NullTime `json:"latest_end_time"`
+	LatestEndTime nullable.Time `json:"latest_end_time"`
 }
 
 func (s *PgStats) fetchSubscription() (PgStatSubscriptionView, error) {

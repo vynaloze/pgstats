@@ -1,7 +1,7 @@
 package pgstats
 
 import (
-	"database/sql"
+	"github.com/vynaloze/pgstats/nullable"
 )
 
 // PgStatXactAllTablesView represents content of pg_stat_xact_all_tables view
@@ -22,21 +22,21 @@ type PgStatXactTablesRow struct {
 	// Name of this table
 	Relname string `json:"relname"`
 	// Number of sequential scans initiated on this table
-	SeqScan sql.NullInt64 `json:"seq_scan"`
+	SeqScan nullable.Int64 `json:"seq_scan"`
 	// Number of live rows fetched by sequential scans
-	SeqTupRead sql.NullInt64 `json:"seq_tup_read"`
+	SeqTupRead nullable.Int64 `json:"seq_tup_read"`
 	// Number of index scans initiated on this table
-	IdxScan sql.NullInt64 `json:"idx_scan"`
+	IdxScan nullable.Int64 `json:"idx_scan"`
 	// Number of live rows fetched by index scans
-	IdxTupFetch sql.NullInt64 `json:"idx_tup_fetch"`
+	IdxTupFetch nullable.Int64 `json:"idx_tup_fetch"`
 	// Number of rows inserted
-	NTupIns sql.NullInt64 `json:"n_tup_ins"`
+	NTupIns nullable.Int64 `json:"n_tup_ins"`
 	// Number of rows updated (includes HOT updated rows)
-	NTupUpd sql.NullInt64 `json:"n_tup_upd"`
+	NTupUpd nullable.Int64 `json:"n_tup_upd"`
 	// Number of rows deleted
-	NTupDel sql.NullInt64 `json:"n_tup_del"`
+	NTupDel nullable.Int64 `json:"n_tup_del"`
 	// Number of rows HOT updated (i.e., with no separate index update required)
-	NTupHotUpd sql.NullInt64 `json:"n_tup_hot_upd"`
+	NTupHotUpd nullable.Int64 `json:"n_tup_hot_upd"`
 }
 
 func (s *PgStats) fetchXactTables(view string) ([]PgStatXactTablesRow, error) {

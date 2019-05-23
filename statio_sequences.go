@@ -1,6 +1,8 @@
 package pgstats
 
-import "database/sql"
+import (
+	"github.com/vynaloze/pgstats/nullable"
+)
 
 // PgStatIoAllSequencesView represents content of pg_statio_all_sequences view
 type PgStatIoAllSequencesView []PgStatIoSequencesRow
@@ -20,9 +22,9 @@ type PgStatIoSequencesRow struct {
 	// Name of this sequence
 	Relname string `json:"relname"`
 	// Number of disk blocks read from this sequence
-	BlksRead sql.NullInt64 `json:"blks_read"`
+	BlksRead nullable.Int64 `json:"blks_read"`
 	// Number of buffer hits in this sequence
-	BlksHit sql.NullInt64 `json:"blks_hit"`
+	BlksHit nullable.Int64 `json:"blks_hit"`
 }
 
 func (s *PgStats) fetchIoSequences(view string) ([]PgStatIoSequencesRow, error) {

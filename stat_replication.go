@@ -1,8 +1,7 @@
 package pgstats
 
 import (
-	"database/sql"
-	"github.com/lib/pq"
+	"github.com/vynaloze/pgstats/nullable"
 )
 
 // PgStatReplicationView represents content of pg_stat_replication view
@@ -13,61 +12,61 @@ type PgStatReplicationRow struct {
 	// Process ID of a WAL sender process
 	Pid int64 `json:"pid"`
 	// OID of the user logged into this WAL sender process
-	Usesysid sql.NullInt64 `json:"usesysid"`
+	Usesysid nullable.Int64 `json:"usesysid"`
 	// Name of the user logged into this WAL sender process
-	Usename sql.NullString `json:"usename"`
+	Usename nullable.String `json:"usename"`
 	// Name of the application that is connected to this WAL sender
-	ApplicationName sql.NullString `json:"application_name"`
+	ApplicationName nullable.String `json:"application_name"`
 	// IP address of the client connected to this WAL sender.
 	// If this field is null, it indicates that the client is connected via a Unix socket on the server machine.
-	ClientAddr sql.NullString `json:"client_addr"`
+	ClientAddr nullable.String `json:"client_addr"`
 	// Host name of the connected client, as reported by a reverse DNS lookup of client_addr.
 	// This field will only be non-null for IP connections, and only when log_hostname is enabled.
-	ClientHostname sql.NullString `json:"client_hostname"`
+	ClientHostname nullable.String `json:"client_hostname"`
 	// TCP port number that the client is using for communication with this WAL sender, or -1 if a Unix socket is used
-	ClientPort sql.NullInt64 `json:"client_port"`
+	ClientPort nullable.Int64 `json:"client_port"`
 	// Time when this process was started, i.e., when the client connected to this WAL sender
-	BackendStart pq.NullTime `json:"backend_start"`
+	BackendStart nullable.Time `json:"backend_start"`
 	// This standby's xmin horizon reported by hot_standby_feedback - see:
 	// https://www.postgresql.org/docs/current/runtime-config-replication.html#GUC-HOT-STANDBY-FEEDBACK
-	BackendXmin sql.NullInt64 `json:"backend_xmin"`
+	BackendXmin nullable.Int64 `json:"backend_xmin"`
 	// Current WAL sender state.
 	// For possible values, see:
 	// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-REPLICATION-VIEW
-	State sql.NullString `json:"state"`
+	State nullable.String `json:"state"`
 	// Last write-ahead log location sent on this connection
-	SentLsn sql.NullInt64 `json:"sent_lsn"`
+	SentLsn nullable.Int64 `json:"sent_lsn"`
 	// Last write-ahead log location written to disk by this standby server
-	WriteLsn sql.NullInt64 `json:"write_lsn"`
+	WriteLsn nullable.Int64 `json:"write_lsn"`
 	// Last write-ahead log location flushed to disk by this standby server
-	FlushLsn sql.NullInt64 `json:"flush_lsn"`
+	FlushLsn nullable.Int64 `json:"flush_lsn"`
 	// Last write-ahead log location replayed into the database on this standby server
-	ReplayLsn sql.NullInt64 `json:"replay_lsn"`
+	ReplayLsn nullable.Int64 `json:"replay_lsn"`
 	// Time elapsed between flushing recent WAL locally and receiving notification that this standby server
 	// has written it (but not yet flushed it or applied it). This can be used to gauge the delay
 	// that synchronous_commit level remote_write incurred while committing
 	// if this server was configured as a synchronous standby.
 	// Supported since PostgreSQL 10
-	WriteLag pq.NullTime `json:"write_lag"`
+	WriteLag nullable.Time `json:"write_lag"`
 	// Time elapsed between flushing recent WAL locally and receiving notification that this standby server
 	// has written 	// and flushed it (but not yet applied it). This can be used to gauge the delay
 	// that synchronous_commit level on incurred while committing
 	// if this server was configured as a synchronous standby.
 	// Supported since PostgreSQL 10
-	FlushLag pq.NullTime `json:"flush_lag"`
+	FlushLag nullable.Time `json:"flush_lag"`
 	// Time elapsed between flushing recent WAL locally and receiving notification that this standby server
 	// has written, flushed and applied it. This can be used to gauge the delay
 	// that synchronous_commit level remote_apply incurred while committing
 	// if this server was configured as a synchronous standby.
 	// Supported since PostgreSQL 10
-	ReplayLag pq.NullTime `json:"replay_lag"`
+	ReplayLag nullable.Time `json:"replay_lag"`
 	// Priority of this standby server for being chosen as the synchronous standby
 	// in a priority-based synchronous replication. This has no effect in a quorum-based synchronous replication.
-	SyncPriority sql.NullInt64 `json:"sync_priority"`
+	SyncPriority nullable.Int64 `json:"sync_priority"`
 	// Synchronous state of this standby server.
 	// For possible values, see:
 	// https://www.postgresql.org/docs/current/monitoring-stats.html#PG-STAT-REPLICATION-VIEW
-	SyncState sql.NullString `json:"sync_state"`
+	SyncState nullable.String `json:"sync_state"`
 }
 
 func (s *PgStats) fetchReplication() ([]PgStatReplicationRow, error) {

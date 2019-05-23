@@ -1,6 +1,8 @@
 package pgstats
 
-import "database/sql"
+import (
+	"github.com/vynaloze/pgstats/nullable"
+)
 
 // PgStatUserFunctionsView represents content of pg_stat_user_functions view
 type PgStatUserFunctionsView []PgStatFunctionsRow
@@ -17,11 +19,11 @@ type PgStatFunctionsRow struct {
 	// Name of this function
 	Funcname string `json:"funcname"`
 	// Number of times this function has been called
-	Calls sql.NullInt64 `json:"calls"`
+	Calls nullable.Int64 `json:"calls"`
 	// Total time spent in this function and all other functions called by it, in milliseconds
-	TotalTime sql.NullFloat64 `json:"total_time"`
+	TotalTime nullable.Float64 `json:"total_time"`
 	// Total time spent in this function itself, not including other functions called by it, in milliseconds
-	SelfTime sql.NullFloat64 `json:"self_time"`
+	SelfTime nullable.Float64 `json:"self_time"`
 }
 
 func (s *PgStats) fetchFunctions(view string) ([]PgStatFunctionsRow, error) {
