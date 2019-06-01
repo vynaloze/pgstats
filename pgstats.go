@@ -11,7 +11,7 @@ type PgStats struct {
 }
 
 // Connect opens a connection using provided parameters and returns a pointer to newly created PgStats struct.
-func Connect(dbname string, user string, password string, options ...func(*connection) error) (*PgStats, error) {
+func Connect(dbname string, user string, password string, options ...Option) (*PgStats, error) {
 	s := &PgStats{}
 	err := s.prepareConnection(dbname, user, password, options...)
 	if err != nil {

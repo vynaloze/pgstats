@@ -16,7 +16,7 @@ var wrapper = struct {
 }
 
 // DefineConnection defines the connection, which can be later used globally to collect statistics.
-func DefineConnection(dbname string, user string, password string, options ...func(*connection) error) error {
+func DefineConnection(dbname string, user string, password string, options ...Option) error {
 	var err error
 	wrapper.once.Do(func() {
 		wrapper.stats, err = Connect(dbname, user, password, options...)

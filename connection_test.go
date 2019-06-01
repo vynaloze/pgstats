@@ -9,31 +9,31 @@ var connCorrectTestTable = []struct {
 	dbname   string
 	user     string
 	password string
-	options  []func(*connection) error
+	options  []Option
 	expected []string
 	count    int
 }{
 	{
 		"testDb", "testUser", "12345",
-		[]func(*connection) error{},
+		[]Option{},
 		[]string{"dbname=testDb", "user=testUser", "password=12345"},
 		3,
 	},
 	{
 		"testDb", "testUser", "12345",
-		[]func(*connection) error{Host("testHostname")},
+		[]Option{Host("testHostname")},
 		[]string{"dbname=testDb", "user=testUser", "password=12345", "host=testHostname"},
 		4,
 	},
 	{
 		"testDb", "testUser", "12345",
-		[]func(*connection) error{Host("testHostname"), Port(1234), SslMode("disable")},
+		[]Option{Host("testHostname"), Port(1234), SslMode("disable")},
 		[]string{"dbname=testDb", "user=testUser", "password=12345", "host=testHostname", "port=1234", "sslmode=disable"},
 		6,
 	},
 	{
 		"testDb", "testUser", "12345",
-		[]func(*connection) error{Host("testHostname"), Port(1234), SslMode("disable"),
+		[]Option{Host("testHostname"), Port(1234), SslMode("disable"),
 			FallbackApplicationName("testApp"), ConnectTimeout(42), SslCert("/test/loc"),
 			SslKey("/another"), SslRootCert("/i/am/already/tired/of/this")},
 		[]string{"dbname=testDb", "user=testUser", "password=12345", "host=testHostname", "port=1234", "sslmode=disable",
@@ -46,11 +46,11 @@ var connFailTestTable = []struct {
 	dbname   string
 	user     string
 	password string
-	options  []func(*connection) error
+	options  []Option
 }{
 	{
 		"testDb", "testUser", "12345",
-		[]func(*connection) error{Host("testHostname"), Port(1234), SslMode("INVALID")},
+		[]Option{Host("testHostname"), Port(1234), SslMode("INVALID")},
 	},
 }
 

@@ -7,6 +7,9 @@ import (
 	"strings"
 )
 
+// Option represents an optional connection parameter
+type Option func(*connection) error
+
 type connectionConfig map[string]string
 
 type connection struct {
@@ -15,7 +18,7 @@ type connection struct {
 	db         *sql.DB
 }
 
-func (s *PgStats) prepareConnection(dbname string, user string, password string, options ...func(*connection) error) error {
+func (s *PgStats) prepareConnection(dbname string, user string, password string, options ...Option) error {
 	conn := &connection{}
 	conn.setRequiredParams(dbname, user, password)
 	err := conn.setOptionalParams(options...)
@@ -52,7 +55,7 @@ func (c *connection) setRequiredParams(dbname string, user string, password stri
 	c.config = config
 }
 
-func (c *connection) setOptionalParams(options ...func(*connection) error) error {
+func (c *connection) setOptionalParams(options ...Option) error {
 	for _, option := range options {
 		err := option(c)
 		if err != nil {

@@ -9,7 +9,7 @@ import (
 // Values that start with / are for unix domain sockets.
 //
 // Default: localhost
-func Host(host string) func(*connection) error {
+func Host(host string) Option {
 	return func(s *connection) error {
 		s.config["host"] = host
 		return nil
@@ -19,7 +19,7 @@ func Host(host string) func(*connection) error {
 // Port sets the port to bind to.
 //
 // Default: 5432
-func Port(port int) func(*connection) error {
+func Port(port int) Option {
 	return func(s *connection) error {
 		s.config["port"] = strconv.Itoa(port)
 		return nil
@@ -33,7 +33,7 @@ func Port(port int) func(*connection) error {
 //     verify-ca - Always SSL (verify that the certificate presented by the server was signed by a trusted CA)
 //     verify-full - Always SSL (verify that the certification presented by the server was signed by a trusted CA and the server host name matches the one in the certificate)
 // Default: require
-func SslMode(mode string) func(*connection) error {
+func SslMode(mode string) Option {
 	validModes := map[string]struct{}{
 		"disable":     {},
 		"require":     {},
@@ -51,7 +51,7 @@ func SslMode(mode string) func(*connection) error {
 
 // FallbackApplicationName sets an application_name
 // to fall back to if one isn't provided.
-func FallbackApplicationName(name string) func(*connection) error {
+func FallbackApplicationName(name string) Option {
 	return func(s *connection) error {
 		s.config["fallback_application_name"] = name
 		return nil
@@ -60,7 +60,7 @@ func FallbackApplicationName(name string) func(*connection) error {
 
 // ConnectTimeout sets the maximum wait for connection, in seconds.
 // Zero or not specified means wait indefinitely.
-func ConnectTimeout(seconds int) func(*connection) error {
+func ConnectTimeout(seconds int) Option {
 	return func(s *connection) error {
 		s.config["connect_timeout"] = strconv.Itoa(seconds)
 		return nil
@@ -69,7 +69,7 @@ func ConnectTimeout(seconds int) func(*connection) error {
 
 // SslCert sets the location of the certificate file.
 // The file must contain PEM encoded data.
-func SslCert(location string) func(*connection) error {
+func SslCert(location string) Option {
 	return func(s *connection) error {
 		s.config["sslcert"] = location
 		return nil
@@ -78,7 +78,7 @@ func SslCert(location string) func(*connection) error {
 
 // SslKey sets the key file location.
 // The file must contain PEM encoded data.
-func SslKey(location string) func(*connection) error {
+func SslKey(location string) Option {
 	return func(s *connection) error {
 		s.config["sslkey"] = location
 		return nil
@@ -87,7 +87,7 @@ func SslKey(location string) func(*connection) error {
 
 // SslRootCert sets the location of the root certificate file.
 // The file must contain PEM encoded data.
-func SslRootCert(location string) func(*connection) error {
+func SslRootCert(location string) Option {
 	return func(s *connection) error {
 		s.config["sslrootcert"] = location
 		return nil
